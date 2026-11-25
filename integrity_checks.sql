@@ -273,3 +273,10 @@ WHERE LOWER(TRIM(o.status)) IN ('complete',
          WHERE oi.order_id = o.order_id
              AND (oi.quantity IS NULL
                   OR oi.unit_price IS NULL));
+
+-- Check 21: Count stock movements with missing timestamps.
+
+SELECT COUNT(*) AS stock_movements_without_timestamp
+FROM inventory_log
+WHERE change_qty <> 0
+    AND created_at IS NULL;

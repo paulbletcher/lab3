@@ -100,3 +100,7 @@
   or unit price. The stored totals for those orders added up to
   455,904.42. The missing values prevented a reliable comparison
   between the stored totals and the sum of the items.
+
+- Check 21 — Stock movement timestamps. Found 0 stock-changing
+  entries with a missing timestamp. Every recorded stock change had
+  a timestamp that can be used to reconstruct the movement timeline.
