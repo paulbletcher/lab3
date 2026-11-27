@@ -1,0 +1,14 @@
+BEGIN
+DO
+ROLLBACK
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  Initial stock: 20
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  Audit failure constraint installed.
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  PASS: Expected audit insertion failure occurred.
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  PASS: Stock adjustment rolled back.
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  Stock after failure: 20
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  PASS: No partial audit records created.
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  Audit records after failure: 0
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  PASS: Movement succeeds after constraint removal.
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  Stock after recovery: 30
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  Matching audit records after recovery: 1
+psql:tests/inventory_audit/05_test_inventory_rollback.sql:175: NOTICE:  ALL INVENTORY ROLLBACK CHECKS PASSED.

@@ -1,0 +1,5 @@
+{
+  "rollback_file": "tests\\phase3\\backups\\before_warm_control_20261127T130352Z.sql",
+  "sha256": "1ae1ada5e9c93a1d3b08d8f798d436f8bb59e5c92509533d78cca92621a52733",
+  "sql_file": "tests\\phase3\\backups\\deployed_place_order_original.sql"
+}

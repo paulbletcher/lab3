@@ -1,0 +1,28 @@
+BEGIN
+DO
+ROLLBACK
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  Synthetic product created with stock of 20.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 1: restock, stock = 30, logged change = 10.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 2: return, stock = 35, logged change = 5.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 3: correction, stock = 38, logged change = 3.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 4: correction, stock = 34, logged change = -4.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 5: damage, stock = 28, logged change = -6.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 6: stock_take, stock = 32, logged change = 4.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 7: stock_take, stock = 25, logged change = -7.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 8: stock_take, stock = 25, logged change = 0.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 9: rejected correctly — Return rejected: successful inspection is required..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 10: rejected correctly — Insufficient stock. Movement would result in negative stock..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 11: rejected correctly — Invalid inventory movement reason: invalid.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 12: rejected correctly — Quantity must be positive for restock movements..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 13: rejected correctly — Quantity must be positive for restock movements..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 14: rejected correctly — Correction quantity cannot be zero..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 15: rejected correctly — Physically counted stock cannot be negative..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 16: rejected correctly — Invalid inventory movement reason: sale.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 17: rejected correctly — Return rejected: successful inspection is required..
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 18: nonexistent product rejected.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  PASS Test 19: stock and audit trail reconcile.
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  Initial stock: 20
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  Net inventory movement: 5
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  Final stock: 25
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  Audit records: 8
+psql:tests/inventory_audit/04_test_inventory_movement.sql:286: NOTICE:  ALL 19 INVENTORY MOVEMENT TESTS PASSED.

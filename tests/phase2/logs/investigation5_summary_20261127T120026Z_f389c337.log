@@ -1,0 +1,1031 @@
+{
+  "investigation": "5 - blocking transactions and lock targets",
+  "utc_completed": "2026-11-27T12:00:56.857071+00:00",
+  "target": {
+    "container": "kloudkart_rebuild",
+    "host": "127.0.0.1",
+    "port": 5433,
+    "database": "postgres",
+    "user": "postgres",
+    "version": "18.7 (Debian 18.7-1.pgdg13+5)",
+    "max_connections": "500",
+    "cluster_identifier": "7712767682595590187",
+    "checkout_definition_md5": "ca9974170fcb78cd8b5d079741cb4107",
+    "public_indexes_md5": "bc0f3a0f811bb7ec785b1e3bfc9561da",
+    "user_triggers_md5": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "dsn_source": "process-only DATABASE_URL from rebuilt-container settings; inherited variable absent",
+  "autocommit_monitor": true,
+  "race_command": "python .\\race_test.py --test 2 --verbose",
+  "race_returncode": 0,
+  "race_outcome": {
+    "successful_purchases": 50,
+    "refusals": 350,
+    "errors": 0,
+    "official_fire_wall_seconds": 21.26
+  },
+  "official_process_wall_seconds": 22.49015809991397,
+  "sample_count": 31,
+  "samples_with_blocking": 8,
+  "requested_interval_seconds": 0.5,
+  "median_interval_seconds": 0.5011020000000004,
+  "maximum_interval_seconds": 3.7647829999999978,
+  "maximum_monitor_query_ms": 3252.318,
+  "peak_blocked_sessions": 324,
+  "peak_blockers": 324,
+  "peak_blocking_relationships": 52327,
+  "peak_root_blockers_in_observed_graph": 6,
+  "peak_sessions_blocked_by_one_backend": 323,
+  "distinct_observed_pid_pairs": 52505,
+  "pair_sample_observations": 97894,
+  "peak_database_connections_excluding_monitor": 399,
+  "peak_active_checkout_connections": 383,
+  "lock_types": {
+    "transactionid": {
+      "samples_present": 4,
+      "peak_ungranted_requests": 64,
+      "request_observations": 67,
+      "requested_modes": [
+        "ShareLock"
+      ],
+      "granted_modes_on_same_targets": [
+        "ExclusiveLock"
+      ],
+      "relations": [],
+      "sampled_wait_age_ms": {
+        "observations": 67,
+        "min": 37.653,
+        "median": 83.636,
+        "max": 879.819
+      }
+    },
+    "tuple": {
+      "samples_present": 8,
+      "peak_ungranted_requests": 323,
+      "request_observations": 1073,
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "granted_modes_on_same_targets": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "sampled_wait_age_ms": {
+        "observations": 1073,
+        "min": 82.142,
+        "median": 2542.151,
+        "max": 4775.594
+      }
+    }
+  },
+  "fixture_tuple_evidence": {
+    "samples_with_tuple_targets": 8,
+    "samples_with_exact_fixture_tuple_match": 7,
+    "peak_ungranted_tuple_requests_on_visible_fixture": 323,
+    "blocking_edges_with_matching_fixture_request": 97651,
+    "independent_log_reconciliation_passed": true,
+    "samples_with_one_tuple_target_and_exact_fixture_match": 7,
+    "samples_with_tuple_targets_but_no_visible_fixture_match": 1
+  },
+  "tuple_coordinates_local_only": {
+    "public.products": [
+      {
+        "page": 41,
+        "tuple": 81,
+        "request_observations": 940
+      },
+      {
+        "page": 41,
+        "tuple": 31,
+        "request_observations": 88
+      },
+      {
+        "page": 41,
+        "tuple": 56,
+        "request_observations": 16
+      },
+      {
+        "page": 41,
+        "tuple": 58,
+        "request_observations": 15
+      },
+      {
+        "page": 41,
+        "tuple": 59,
+        "request_observations": 10
+      },
+      {
+        "page": 41,
+        "tuple": 32,
+        "request_observations": 3
+      },
+      {
+        "page": 41,
+        "tuple": 60,
+        "request_observations": 1
+      }
+    ]
+  },
+  "edge_target_match_classes": {
+    "matching_queued_request": 97284,
+    "no_matching_target_in_lock_snapshot": 57,
+    "matching_granted_holder": 553
+  },
+  "snapshot_transition_observations": {
+    "blocker_edge_waiter_not_in_Lock_at_activity_snapshot": 208
+  },
+  "most_frequent_relationships": [
+    {
+      "blocked_backend_pid": 2879,
+      "blocking_backend_pid": 2674,
+      "blocked_alias": "Backend241",
+      "blocking_alias": "Backend071",
+      "samples_present": 8,
+      "blocked_wait_events": [
+        [
+          "active",
+          "LWLock",
+          "LockManager"
+        ],
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "LWLock",
+          "LockManager"
+        ],
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 18,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2962,
+      "blocking_backend_pid": 2686,
+      "blocked_alias": "Backend309",
+      "blocking_alias": "Backend081",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "LWLock",
+          "LockManager"
+        ],
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "LWLock",
+          "LockManager"
+        ],
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 18,
+      "last_sample": 24,
+      "matching_fixture_samples": 6
+    },
+    {
+      "blocked_backend_pid": 2597,
+      "blocking_backend_pid": 2932,
+      "blocked_alias": "Backend006",
+      "blocking_alias": "Backend288",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "transactionid"
+        ],
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2597,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend006",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2635,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend040",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2674,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend071",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2711,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend102",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2724,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend113",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2814,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend186",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    },
+    {
+      "blocked_backend_pid": 2602,
+      "blocking_backend_pid": 2885,
+      "blocked_alias": "Backend011",
+      "blocking_alias": "Backend247",
+      "samples_present": 7,
+      "blocked_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "blocker_wait_events": [
+        [
+          "active",
+          "Lock",
+          "tuple"
+        ]
+      ],
+      "wait_lock_types": [
+        "tuple"
+      ],
+      "requested_modes": [
+        "ExclusiveLock"
+      ],
+      "relations": [
+        "public.products"
+      ],
+      "first_sample": 19,
+      "last_sample": 25,
+      "matching_fixture_samples": 7
+    }
+  ],
+  "largest_observed_blockers": [
+    {
+      "backend_pid": 2660,
+      "alias": "Backend060",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 323,
+      "peak_sample_number": 19,
+      "state_at_peak": {
+        "state": "active",
+        "wait_event": "transactionid",
+        "active_checkout": true,
+        "wait_event_type": "Lock",
+        "activity_available": true
+      },
+      "lock_roles_at_peak": [
+        {
+          "locktype": "transactionid",
+          "mode": "ShareLock",
+          "granted": false
+        },
+        {
+          "locktype": "tuple",
+          "mode": "ExclusiveLock",
+          "granted": true
+        }
+      ]
+    },
+    {
+      "backend_pid": 2805,
+      "alias": "Backend178",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 322
+    },
+    {
+      "backend_pid": 2964,
+      "alias": "Backend311",
+      "samples_as_blocker": 2,
+      "peak_directly_blocked_sessions": 321
+    },
+    {
+      "backend_pid": 2618,
+      "alias": "Backend024",
+      "samples_as_blocker": 2,
+      "peak_directly_blocked_sessions": 320
+    },
+    {
+      "backend_pid": 2728,
+      "alias": "Backend116",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 319
+    },
+    {
+      "backend_pid": 2668,
+      "alias": "Backend066",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 318
+    },
+    {
+      "backend_pid": 2696,
+      "alias": "Backend091",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 317
+    },
+    {
+      "backend_pid": 2646,
+      "alias": "Backend050",
+      "samples_as_blocker": 2,
+      "peak_directly_blocked_sessions": 316
+    },
+    {
+      "backend_pid": 2595,
+      "alias": "Backend004",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 315
+    },
+    {
+      "backend_pid": 2638,
+      "alias": "Backend043",
+      "samples_as_blocker": 1,
+      "peak_directly_blocked_sessions": 314
+    }
+  ],
+  "backend_pid_aliases": {
+    "2591": "Backend001",
+    "2592": "Backend002",
+    "2594": "Backend003",
+    "2595": "Backend004",
+    "2596": "Backend005",
+    "2597": "Backend006",
+    "2598": "Backend007",
+    "2599": "Backend008",
+    "2600": "Backend009",
+    "2601": "Backend010",
+    "2602": "Backend011",
+    "2604": "Backend012",
+    "2605": "Backend013",
+    "2606": "Backend014",
+    "2607": "Backend015",
+    "2608": "Backend016",
+    "2609": "Backend017",
+    "2611": "Backend018",
+    "2612": "Backend019",
+    "2614": "Backend020",
+    "2615": "Backend021",
+    "2616": "Backend022",
+    "2617": "Backend023",
+    "2618": "Backend024",
+    "2619": "Backend025",
+    "2620": "Backend026",
+    "2621": "Backend027",
+    "2622": "Backend028",
+    "2623": "Backend029",
+    "2624": "Backend030",
+    "2625": "Backend031",
+    "2626": "Backend032",
+    "2627": "Backend033",
+    "2628": "Backend034",
+    "2630": "Backend035",
+    "2631": "Backend036",
+    "2632": "Backend037",
+    "2633": "Backend038",
+    "2634": "Backend039",
+    "2635": "Backend040",
+    "2636": "Backend041",
+    "2637": "Backend042",
+    "2638": "Backend043",
+    "2639": "Backend044",
+    "2640": "Backend045",
+    "2641": "Backend046",
+    "2642": "Backend047",
+    "2643": "Backend048",
+    "2644": "Backend049",
+    "2646": "Backend050",
+    "2647": "Backend051",
+    "2648": "Backend052",
+    "2649": "Backend053",
+    "2650": "Backend054",
+    "2651": "Backend055",
+    "2656": "Backend056",
+    "2657": "Backend057",
+    "2658": "Backend058",
+    "2659": "Backend059",
+    "2660": "Backend060",
+    "2662": "Backend061",
+    "2663": "Backend062",
+    "2664": "Backend063",
+    "2666": "Backend064",
+    "2667": "Backend065",
+    "2668": "Backend066",
+    "2669": "Backend067",
+    "2671": "Backend068",
+    "2672": "Backend069",
+    "2673": "Backend070",
+    "2674": "Backend071",
+    "2676": "Backend072",
+    "2677": "Backend073",
+    "2679": "Backend074",
+    "2680": "Backend075",
+    "2681": "Backend076",
+    "2682": "Backend077",
+    "2683": "Backend078",
+    "2684": "Backend079",
+    "2685": "Backend080",
+    "2686": "Backend081",
+    "2687": "Backend082",
+    "2688": "Backend083",
+    "2689": "Backend084",
+    "2690": "Backend085",
+    "2691": "Backend086",
+    "2692": "Backend087",
+    "2693": "Backend088",
+    "2694": "Backend089",
+    "2695": "Backend090",
+    "2696": "Backend091",
+    "2697": "Backend092",
+    "2699": "Backend093",
+    "2700": "Backend094",
+    "2703": "Backend095",
+    "2704": "Backend096",
+    "2705": "Backend097",
+    "2706": "Backend098",
+    "2707": "Backend099",
+    "2708": "Backend100",
+    "2710": "Backend101",
+    "2711": "Backend102",
+    "2713": "Backend103",
+    "2715": "Backend104",
+    "2716": "Backend105",
+    "2717": "Backend106",
+    "2718": "Backend107",
+    "2719": "Backend108",
+    "2720": "Backend109",
+    "2721": "Backend110",
+    "2722": "Backend111",
+    "2723": "Backend112",
+    "2724": "Backend113",
+    "2726": "Backend114",
+    "2727": "Backend115",
+    "2728": "Backend116",
+    "2729": "Backend117",
+    "2730": "Backend118",
+    "2731": "Backend119",
+    "2732": "Backend120",
+    "2735": "Backend121",
+    "2737": "Backend122",
+    "2738": "Backend123",
+    "2739": "Backend124",
+    "2740": "Backend125",
+    "2741": "Backend126",
+    "2742": "Backend127",
+    "2743": "Backend128",
+    "2744": "Backend129",
+    "2746": "Backend130",
+    "2747": "Backend131",
+    "2748": "Backend132",
+    "2749": "Backend133",
+    "2751": "Backend134",
+    "2752": "Backend135",
+    "2754": "Backend136",
+    "2755": "Backend137",
+    "2756": "Backend138",
+    "2757": "Backend139",
+    "2758": "Backend140",
+    "2759": "Backend141",
+    "2760": "Backend142",
+    "2761": "Backend143",
+    "2763": "Backend144",
+    "2764": "Backend145",
+    "2765": "Backend146",
+    "2766": "Backend147",
+    "2767": "Backend148",
+    "2769": "Backend149",
+    "2770": "Backend150",
+    "2771": "Backend151",
+    "2774": "Backend152",
+    "2775": "Backend153",
+    "2776": "Backend154",
+    "2777": "Backend155",
+    "2779": "Backend156",
+    "2780": "Backend157",
+    "2781": "Backend158",
+    "2782": "Backend159",
+    "2784": "Backend160",
+    "2785": "Backend161",
+    "2786": "Backend162",
+    "2787": "Backend163",
+    "2788": "Backend164",
+    "2789": "Backend165",
+    "2790": "Backend166",
+    "2792": "Backend167",
+    "2793": "Backend168",
+    "2794": "Backend169",
+    "2796": "Backend170",
+    "2798": "Backend171",
+    "2799": "Backend172",
+    "2800": "Backend173",
+    "2801": "Backend174",
+    "2802": "Backend175",
+    "2803": "Backend176",
+    "2804": "Backend177",
+    "2805": "Backend178",
+    "2806": "Backend179",
+    "2807": "Backend180",
+    "2809": "Backend181",
+    "2810": "Backend182",
+    "2811": "Backend183",
+    "2812": "Backend184",
+    "2813": "Backend185",
+    "2814": "Backend186",
+    "2815": "Backend187",
+    "2816": "Backend188",
+    "2817": "Backend189",
+    "2818": "Backend190",
+    "2820": "Backend191",
+    "2821": "Backend192",
+    "2822": "Backend193",
+    "2823": "Backend194",
+    "2824": "Backend195",
+    "2825": "Backend196",
+    "2826": "Backend197",
+    "2827": "Backend198",
+    "2828": "Backend199",
+    "2829": "Backend200",
+    "2830": "Backend201",
+    "2831": "Backend202",
+    "2832": "Backend203",
+    "2833": "Backend204",
+    "2834": "Backend205",
+    "2835": "Backend206",
+    "2836": "Backend207",
+    "2837": "Backend208",
+    "2838": "Backend209",
+    "2839": "Backend210",
+    "2840": "Backend211",
+    "2841": "Backend212",
+    "2842": "Backend213",
+    "2843": "Backend214",
+    "2844": "Backend215",
+    "2845": "Backend216",
+    "2846": "Backend217",
+    "2847": "Backend218",
+    "2848": "Backend219",
+    "2849": "Backend220",
+    "2850": "Backend221",
+    "2852": "Backend222",
+    "2853": "Backend223",
+    "2854": "Backend224",
+    "2856": "Backend225",
+    "2858": "Backend226",
+    "2861": "Backend227",
+    "2863": "Backend228",
+    "2864": "Backend229",
+    "2865": "Backend230",
+    "2867": "Backend231",
+    "2868": "Backend232",
+    "2870": "Backend233",
+    "2871": "Backend234",
+    "2873": "Backend235",
+    "2874": "Backend236",
+    "2875": "Backend237",
+    "2876": "Backend238",
+    "2877": "Backend239",
+    "2878": "Backend240",
+    "2879": "Backend241",
+    "2880": "Backend242",
+    "2881": "Backend243",
+    "2882": "Backend244",
+    "2883": "Backend245",
+    "2884": "Backend246",
+    "2885": "Backend247",
+    "2886": "Backend248",
+    "2887": "Backend249",
+    "2888": "Backend250",
+    "2889": "Backend251",
+    "2890": "Backend252",
+    "2891": "Backend253",
+    "2893": "Backend254",
+    "2894": "Backend255",
+    "2895": "Backend256",
+    "2896": "Backend257",
+    "2897": "Backend258",
+    "2898": "Backend259",
+    "2899": "Backend260",
+    "2900": "Backend261",
+    "2901": "Backend262",
+    "2902": "Backend263",
+    "2903": "Backend264",
+    "2904": "Backend265",
+    "2905": "Backend266",
+    "2907": "Backend267",
+    "2908": "Backend268",
+    "2909": "Backend269",
+    "2910": "Backend270",
+    "2911": "Backend271",
+    "2912": "Backend272",
+    "2913": "Backend273",
+    "2914": "Backend274",
+    "2915": "Backend275",
+    "2916": "Backend276",
+    "2917": "Backend277",
+    "2918": "Backend278",
+    "2919": "Backend279",
+    "2921": "Backend280",
+    "2923": "Backend281",
+    "2924": "Backend282",
+    "2925": "Backend283",
+    "2927": "Backend284",
+    "2928": "Backend285",
+    "2929": "Backend286",
+    "2930": "Backend287",
+    "2932": "Backend288",
+    "2933": "Backend289",
+    "2934": "Backend290",
+    "2936": "Backend291",
+    "2937": "Backend292",
+    "2938": "Backend293",
+    "2940": "Backend294",
+    "2941": "Backend295",
+    "2942": "Backend296",
+    "2943": "Backend297",
+    "2944": "Backend298",
+    "2946": "Backend299",
+    "2948": "Backend300",
+    "2949": "Backend301",
+    "2950": "Backend302",
+    "2951": "Backend303",
+    "2953": "Backend304",
+    "2954": "Backend305",
+    "2957": "Backend306",
+    "2960": "Backend307",
+    "2961": "Backend308",
+    "2962": "Backend309",
+    "2963": "Backend310",
+    "2964": "Backend311",
+    "2965": "Backend312",
+    "2967": "Backend313",
+    "2968": "Backend314",
+    "2969": "Backend315",
+    "2970": "Backend316",
+    "2971": "Backend317",
+    "2972": "Backend318",
+    "2973": "Backend319",
+    "2974": "Backend320",
+    "2975": "Backend321",
+    "2976": "Backend322",
+    "2977": "Backend323",
+    "2978": "Backend324",
+    "2979": "Backend325",
+    "2980": "Backend326",
+    "2981": "Backend327",
+    "2982": "Backend328",
+    "2984": "Backend329",
+    "2985": "Backend330",
+    "2986": "Backend331",
+    "2987": "Backend332",
+    "2988": "Backend333",
+    "2989": "Backend334",
+    "2990": "Backend335"
+  },
+  "fixture_before": {
+    "check": "before_test",
+    "utc": "2026-11-27T12:00:28.735465+00:00",
+    "table_counts": {
+      "products": 4023,
+      "orders": 159384,
+      "inventory_log": 282352,
+      "order_items": 336559
+    },
+    "remaining_fixtures": 0,
+    "next_fixture_safety": {
+      "next_fixture_id": 10123,
+      "existing_item_references": 0,
+      "existing_log_references": 0
+    },
+    "safe": true
+  },
+  "fixture_after": {
+    "check": "after_test",
+    "utc": "2026-11-27T12:00:52.361666+00:00",
+    "table_counts": {
+      "products": 4023,
+      "orders": 159384,
+      "order_items": 336559,
+      "inventory_log": 282352
+    },
+    "remaining_fixtures": 0,
+    "next_fixture_safety": {
+      "next_fixture_id": 10123,
+      "existing_item_references": 0,
+      "existing_log_references": 0
+    },
+    "safe": true
+  },
+  "source_files_unchanged": true,
+  "database_fingerprint_unchanged": true,
+  "monitor_errors": [],
+  "execution_error": null,
+  "phase_markers": [
+    {
+      "record_type": "marker",
+      "name": "official_test_running",
+      "utc": "2026-11-27T12:00:29.454604+00:00",
+      "elapsed_s": 2.735459
+    },
+    {
+      "record_type": "marker",
+      "name": "official_process_launched",
+      "utc": "2026-11-27T12:00:29.467179+00:00",
+      "elapsed_s": 2.748038
+    },
+    {
+      "record_type": "marker",
+      "name": "official_test_completed",
+      "utc": "2026-11-27T12:00:51.947098+00:00",
+      "elapsed_s": 25.227968
+    },
+    {
+      "record_type": "marker",
+      "name": "post_fixture_check",
+      "utc": "2026-11-27T12:00:51.947386+00:00",
+      "elapsed_s": 25.228235
+    },
+    {
+      "record_type": "marker",
+      "name": "post_test_settled",
+      "utc": "2026-11-27T12:00:52.427182+00:00",
+      "elapsed_s": 25.708041
+    },
+    {
+      "record_type": "marker",
+      "name": "monitoring_completed",
+      "utc": "2026-11-27T12:00:54.528807+00:00",
+      "elapsed_s": 27.809672
+    }
+  ],
+  "logs": {
+    "samples": "tests\\phase2\\logs\\blocking_samples_20261127T120026Z_f389c337.jsonl",
+    "official_test": "tests\\phase2\\logs\\blocking_official_test2_20261127T120026Z_f389c337.log",
+    "fixture_checks": "tests\\phase2\\logs\\blocking_fixture_safety_20261127T120026Z_f389c337.jsonl",
+    "summary": "tests\\phase2\\logs\\investigation5_summary_20261127T120026Z_f389c337.log",
+    "sql": "tests\\phase2\\logs\\investigate_blocking_20261127T120026Z_f389c337.sql"
+  },
+  "limitations": [
+    "Activity, pg_locks and per-session pg_blocking_pids calls are collected in one statement but are not a globally atomic lock-manager snapshot.",
+    "pg_blocking_pids includes conflicting earlier queue members as well as actual lock holders; blockers may themselves be blocked.",
+    "Frequent pg_blocking_pids calls and pg_locks inspection add monitoring overhead; this is not an uninstrumented performance benchmark.",
+    "Sampled wait ages come from pg_locks.waitstart, not query age, and are elapsed current waits rather than total completed wait durations.",
+    "Short waits and peak relationships may be missed; a missing relation on a transaction-ID lock does not establish a table target.",
+    "Visible fixture tuple locations can change across updates; only an exact positive match directly identifies that visible fixture tuple."
+  ],
+  "preliminary_interpretation": {
+    "confirmed": [
+      "The unchanged official Test 2 passed: 50 successful purchases, 350 refusals, no errors or overselling, 21.26 seconds of reported fire() wall time.",
+      "In seven samples, the only ungranted tuple target was public.products at exactly the physical location of the visible official synthetic fixture row. Up to 323 requests waited for ExclusiveLock on that matched tuple.",
+      "Transaction-ID waits requested ShareLock and corresponding granted holders had ExclusiveLock. Transaction-ID targets carry no table relation, so those targets were not relabeled as product-row locks.",
+      "No ungranted relation lock or other heavyweight lock type was sampled. Granted relation locks are context, not evidence of blocked tables.",
+      "pg_blocking_pids returned a dense queue graph. Most matched relationships corresponded to an earlier ungranted request on the same target, rather than a granted holder.",
+      "Fixture safety passed before and after; original race/source hashes and database function/index/trigger fingerprints were unchanged."
+    ],
+    "hypotheses_and_limits": [
+      "The six unmatched product tuple locations in the first blocking sample may be earlier fixture row versions, but this was not established by a visible fixture tuple match.",
+      "Fixture-row contention contributes to waiting; its contribution to total end-to-end wall time and whether it is the primary bottleneck remain unquantified.",
+      "The 21.26-second run cannot be causally compared with prior 12.89/16.10-second runs. This sampler calls pg_blocking_pids repeatedly and inspects pg_locks, which can add lock-manager contention.",
+      "There is timing drift within samples: 57 pair observations lacked matching lock-target context and 208 pair observations had a waiter whose earlier activity snapshot was not in Lock.",
+      "Recorded wait ages are repeated samples of elapsed time since pg_locks.waitstart, not completed per-call wait durations; sources are not globally atomic.",
+      "Query round-trip timing is the authoritative monitor duration; SQL clock markers delimit parts of evaluation and should not be interpreted as exact simultaneous acquisition of all views."
+    ]
+  },
+  "execution_notes": [
+    "Autocommit was enabled for every monitoring SELECT; samples began before the official process and continued after fixture cleanup.",
+    "DATABASE_URL was absent from the inherited environment; a private process-only value was constructed from kloudkart_rebuild settings and validated for 127.0.0.1:5433.",
+    "Only the new diagnostic SQL and its log artifacts were added. Investigation 4 files and all existing user work were preserved.",
+    "No PostgreSQL configuration or indexes were changed, no checkout implementation was modified, and no optimization, commit or push was performed.",
+    "Backend PIDs appear only in local diagnostic logs. Displayed BackendNNN names are run-local aliases, never customer identifiers."
+  ]
+}

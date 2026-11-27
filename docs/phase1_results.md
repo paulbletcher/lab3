@@ -2,7 +2,7 @@
 
 Phase 1 data diagnosis is complete. All 21 integrity checks executed successfully. The [diagnosis](diagnosis.md) explains the findings, business implications, and risk ranking.
 
-The schema observations, row counts and integrity results below describe the historical Phase 1 baseline. Phase 2 is now complete, and Phase 3 is in progress. See [identity-stage verification](phase2_identity.md), [completed checkout verification](phase2_test_results.md) and [Phase 3 reporting](phase3_reporting.md) for subsequent work. The original observations and values are preserved here.
+These results describe the historical Phase 1 baseline. This repository-only restart does not reset or reverify the existing PostgreSQL database; its state will be handled separately.
 
 ## Environment
 
@@ -118,10 +118,8 @@ Deleting orphaned order items would remove evidence of historical purchases. Ass
 
 For Kloud Kart, preserving this evidence supports reliable customer-spending analysis and an inventory trail that can be investigated. Reports will need explicit, documented handling of unresolved records, and any later correction must be supported by evidence.
 
-Preventing new faults and correcting historical faults are separate responsibilities. Phase 2 now validates and locks checkout requests and atomically records pending orders, stock deductions and sale movements through `place_order`. These controls protect that call path without implying that historical records have been repaired or arbitrary inventory updates are audited.
+Preventing new faults and correcting historical faults are separate responsibilities. Future checkout validation, stock controls, and audit behavior can protect new transactions without assuming that existing records have been repaired.
 
 ## Project status
 
-Phases 0, 1 and 2 are complete. Phase 3 is in progress, currently limited to the reporting base and its aggregate reconciliation. Phases 4 and 5 have not started.
-
-Payment processing, reservation expiry, cancellation/stock restoration and permanent foreign-key enforcement remain unimplemented. These current-status statements do not replace the historical Phase 1 observations above.
+Phases 0 and 1 are complete. Phases 2 through 5 are not started. Checkout and the inventory audit mechanism are future work.

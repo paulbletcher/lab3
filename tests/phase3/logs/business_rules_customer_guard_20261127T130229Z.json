@@ -1,0 +1,75 @@
+{
+  "checks": [
+    {
+      "check": "null customer",
+      "passed": true
+    },
+    {
+      "check": "null product",
+      "passed": true
+    },
+    {
+      "check": "null quantity",
+      "passed": true
+    },
+    {
+      "check": "zero quantity",
+      "passed": true
+    },
+    {
+      "check": "negative quantity",
+      "passed": true
+    },
+    {
+      "check": "missing customer",
+      "passed": true
+    },
+    {
+      "check": "missing product",
+      "passed": true
+    },
+    {
+      "check": "product bigint outside integer range",
+      "passed": true
+    },
+    {
+      "check": "customer precedence when product also missing",
+      "passed": true
+    },
+    {
+      "check": "insufficient stock",
+      "passed": true
+    },
+    {
+      "check": "null price",
+      "passed": true
+    },
+    {
+      "check": "negative price",
+      "passed": true
+    },
+    {
+      "check": "null stock",
+      "passed": true
+    },
+    {
+      "check": "multi-unit success: stock/order/item/movement consistent",
+      "passed": true
+    },
+    {
+      "check": "insufficient after success",
+      "passed": true
+    },
+    {
+      "check": "zero price is valid under original rules",
+      "passed": true
+    },
+    {
+      "check": "post-stock INSERT failure rolls back deduction and partial writes",
+      "passed": true
+    }
+  ],
+  "label": "customer_guard",
+  "passed": 17,
+  "rollback_cleanup_verified": true
+}

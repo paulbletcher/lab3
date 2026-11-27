@@ -1,0 +1,129 @@
+{
+  "baseline": {
+    "results_file": "tests/phase3/logs/baseline_20261127T125426Z_results.json",
+    "test2_seconds": [
+      15.73,
+      8.51,
+      7.38
+    ],
+    "all_official_tests_passed": true,
+    "all_cleanup_checks_passed": true,
+    "test2_median_seconds": 8.51,
+    "all_three_under_ten": false
+  },
+  "advisory": {
+    "results_file": "tests/phase3/logs/advisory_20261127T125628Z_results.json",
+    "test2_seconds": [
+      16.76,
+      9.3,
+      7.34
+    ],
+    "all_official_tests_passed": true,
+    "all_cleanup_checks_passed": true,
+    "test2_median_seconds": 9.3,
+    "all_three_under_ten": false
+  },
+  "cte_guarded": {
+    "results_file": "tests/phase3/logs/cte_guarded_20261127T125945Z_results.json",
+    "test2_seconds": [
+      13.87,
+      9.62,
+      7.86
+    ],
+    "all_official_tests_passed": true,
+    "all_cleanup_checks_passed": true,
+    "test2_median_seconds": 9.62,
+    "all_three_under_ten": false
+  },
+  "customer_guard": {
+    "results_file": "tests/phase3/logs/customer_guard_20261127T130235Z_results.json",
+    "test2_seconds": [
+      7.99,
+      7.48,
+      8.43
+    ],
+    "all_official_tests_passed": true,
+    "all_cleanup_checks_passed": true,
+    "test2_median_seconds": 7.99,
+    "all_three_under_ten": true
+  },
+  "warm_control": {
+    "results_file": "tests/phase3/logs/warm_control_20261127T130353Z_results.json",
+    "test2_seconds": [
+      8.94,
+      7.08,
+      8.8
+    ],
+    "all_official_tests_passed": true,
+    "all_cleanup_checks_passed": true,
+    "test2_median_seconds": 8.8,
+    "all_three_under_ten": true
+  },
+  "final_customer_guard": {
+    "results_file": "tests/phase3/logs/final_customer_guard_20261127T130457Z_results.json",
+    "test2_seconds": [
+      7.47,
+      7.46,
+      7.58
+    ],
+    "all_official_tests_passed": true,
+    "all_cleanup_checks_passed": true,
+    "test2_median_seconds": 7.47,
+    "all_three_under_ten": true,
+    "official_tests": {
+      "1": [
+        {
+          "successes": 25,
+          "refusals": 25,
+          "errors": 0,
+          "process_seconds": 4.793066999991424,
+          "output_log": "tests/phase3/logs/final_customer_guard_20261127T130457Z_01_test1.log"
+        }
+      ],
+      "2": [
+        {
+          "successes": 50,
+          "refusals": 350,
+          "errors": 0,
+          "process_seconds": 8.154356600018218,
+          "output_log": "tests/phase3/logs/final_customer_guard_20261127T130457Z_02_test2.log"
+        },
+        {
+          "successes": 50,
+          "refusals": 350,
+          "errors": 0,
+          "process_seconds": 8.091992800007574,
+          "output_log": "tests/phase3/logs/final_customer_guard_20261127T130457Z_03_test2.log"
+        },
+        {
+          "successes": 50,
+          "refusals": 350,
+          "errors": 0,
+          "process_seconds": 8.223381799994968,
+          "output_log": "tests/phase3/logs/final_customer_guard_20261127T130457Z_04_test2.log"
+        }
+      ],
+      "3": [
+        {
+          "successes": 0,
+          "refusals": 1,
+          "errors": 0,
+          "process_seconds": 0.6512451999587938,
+          "output_log": "tests/phase3/logs/final_customer_guard_20261127T130457Z_05_test3.log"
+        }
+      ],
+      "4": [
+        {
+          "successes": 5,
+          "refusals": 7,
+          "errors": 0,
+          "process_seconds": 0.9294385999673977,
+          "output_log": "tests/phase3/logs/final_customer_guard_20261127T130457Z_06_test4.log"
+        }
+      ]
+    }
+  },
+  "final_vs_warm_control_median_percent_reduction": 15.113636363636374,
+  "final_vs_fresh_baseline_median_percent_reduction": 12.220916568742657,
+  "historical_comparison_percent_reduction_not_causal": 53.6024844720497
+}

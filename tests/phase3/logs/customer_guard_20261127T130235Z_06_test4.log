@@ -1,0 +1,21 @@
+race_test.py — Kloud Kart order placement under contention
+==================================================================
+  place_order found: place_order(p_customer_id bigint, p_product_id bigint, p_quantity integer)
+
+Test 4 — audit trail after contention
+        [  0] success=True order_id=1000867    22.6ms msg='Order placed successfully.' err=''
+        [  1] success=False order_id=None    58.7ms msg='Out of stock.' err=''
+        [  2] success=True order_id=1000870    41.1ms msg='Order placed successfully.' err=''
+        [  3] success=True order_id=1000871    46.4ms msg='Order placed successfully.' err=''
+        [  4] success=False order_id=None    75.7ms msg='Out of stock.' err=''
+        [  5] success=False order_id=None    54.3ms msg='Out of stock.' err=''
+        [  6] success=False order_id=None    71.4ms msg='Out of stock.' err=''
+        [  7] success=False order_id=None    78.2ms msg='Out of stock.' err=''
+        [  8] success=False order_id=None    83.0ms msg='Out of stock.' err=''
+        [  9] success=False order_id=None    63.9ms msg='Out of stock.' err=''
+        [ 10] success=True order_id=1000869    35.6ms msg='Order placed successfully.' err=''
+        [ 11] success=True order_id=1000868    31.9ms msg='Order placed successfully.' err=''
+  ok    5 sold, 5 movements recorded
+
+==================================================================
+PASSED — exactly one buyer gets the last unit, every time.

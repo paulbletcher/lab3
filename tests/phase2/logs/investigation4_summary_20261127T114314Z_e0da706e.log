@@ -1,0 +1,608 @@
+{
+  "investigation": "4 - actual official flash-sale wait events",
+  "utc_completed": "2026-11-27T11:43:33.064394+00:00",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "container": "kloudkart_rebuild",
+    "database": "postgres",
+    "user": "postgres",
+    "version": "18.7 (Debian 18.7-1.pgdg13+5)",
+    "max_connections": "500",
+    "cluster_identifier": "7712767682595590187",
+    "checkout_definition_md5": "ca9974170fcb78cd8b5d079741cb4107",
+    "public_indexes_md5": "bc0f3a0f811bb7ec785b1e3bfc9561da",
+    "user_triggers_md5": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "dsn_source": "process-only DATABASE_URL from rebuilt-container settings; inherited variable absent",
+  "race_command": "python .\\race_test.py --test 2 --verbose",
+  "race_returncode": 0,
+  "race_outcome": {
+    "successful_purchases": 50,
+    "refusals": 350,
+    "errors": 0,
+    "official_fire_wall_seconds": 12.89
+  },
+  "official_process_wall_seconds": 13.644541,
+  "sampling": {
+    "requested_interval_seconds": 0.5,
+    "samples": 30,
+    "elapsed_first_to_last_seconds": 16.276952,
+    "median_interval_seconds": 0.49998000000000253,
+    "max_interval_seconds": 2.2857529999999997,
+    "maximum_monitor_query_ms": 1770.666
+  },
+  "observed_peaks": {
+    "database_connections_excluding_monitor": 402,
+    "database_connections_including_monitor": 403,
+    "cluster_client_connections_including_monitor": 403,
+    "active_connections_excluding_monitor": 380,
+    "active_connections_including_monitor": 381,
+    "active_checkout_connections": 380
+  },
+  "event_types": {
+    "Client": {
+      "samples_present": 30,
+      "peak_connections": 387,
+      "backend_sample_observations": 2414
+    },
+    "No wait reported": {
+      "samples_present": 11,
+      "peak_connections": 304,
+      "backend_sample_observations": 324
+    },
+    "LWLock": {
+      "samples_present": 3,
+      "peak_connections": 269,
+      "backend_sample_observations": 528
+    },
+    "Lock": {
+      "samples_present": 6,
+      "peak_connections": 287,
+      "backend_sample_observations": 940
+    },
+    "IO": {
+      "samples_present": 4,
+      "peak_connections": 1,
+      "backend_sample_observations": 4
+    }
+  },
+  "events": {
+    "Client/ClientRead": {
+      "samples_present": 30,
+      "peak_connections": 387,
+      "backend_sample_observations": 2414,
+      "states": [
+        null,
+        "active",
+        "idle"
+      ],
+      "first_elapsed_s": 2.432856,
+      "last_elapsed_s": 18.709808
+    },
+    "No wait reported/(none)": {
+      "samples_present": 11,
+      "peak_connections": 304,
+      "backend_sample_observations": 324,
+      "states": [
+        null,
+        "active",
+        "idle"
+      ],
+      "first_elapsed_s": 4.940724,
+      "last_elapsed_s": 16.217898
+    },
+    "LWLock/LockManager": {
+      "samples_present": 3,
+      "peak_connections": 269,
+      "backend_sample_observations": 507,
+      "states": [
+        "active"
+      ],
+      "first_elapsed_s": 11.434737,
+      "last_elapsed_s": 14.210615
+    },
+    "LWLock/BufferContent": {
+      "samples_present": 1,
+      "peak_connections": 21,
+      "backend_sample_observations": 21,
+      "states": [
+        "active"
+      ],
+      "first_elapsed_s": 11.434737,
+      "last_elapsed_s": 11.434737
+    },
+    "Lock/tuple": {
+      "samples_present": 5,
+      "peak_connections": 286,
+      "backend_sample_observations": 811,
+      "states": [
+        "active"
+      ],
+      "first_elapsed_s": 13.72049,
+      "last_elapsed_s": 16.217898
+    },
+    "Lock/transactionid": {
+      "samples_present": 6,
+      "peak_connections": 82,
+      "backend_sample_observations": 129,
+      "states": [
+        "active"
+      ],
+      "first_elapsed_s": 13.72049,
+      "last_elapsed_s": 16.217898
+    },
+    "IO/WalSync": {
+      "samples_present": 4,
+      "peak_connections": 1,
+      "backend_sample_observations": 4,
+      "states": [
+        "active"
+      ],
+      "first_elapsed_s": 13.72049,
+      "last_elapsed_s": 15.717918
+    }
+  },
+  "checkout_first_observed_elapsed_s": 11.434737,
+  "checkout_last_observed_elapsed_s": 16.217898,
+  "call_latency_ms": {
+    "count": 400,
+    "min": 2121.2,
+    "median": 4064.5,
+    "p95": 5116.6,
+    "max": 5219.3
+  },
+  "fixture_before": {
+    "check": "before_test",
+    "utc": "2026-11-27T11:43:16.428813+00:00",
+    "table_counts": {
+      "products": 4023,
+      "orders": 159384,
+      "order_items": 336559,
+      "inventory_log": 282352
+    },
+    "remaining_fixtures": 0,
+    "next_fixture_safety": {
+      "next_fixture_id": 10123,
+      "existing_item_references": 0,
+      "existing_log_references": 0
+    },
+    "matches_expected_baseline": true,
+    "safe": true
+  },
+  "fixture_after": {
+    "check": "after_test",
+    "utc": "2026-11-27T11:43:30.913280+00:00",
+    "table_counts": {
+      "products": 4023,
+      "orders": 159384,
+      "inventory_log": 282352,
+      "order_items": 336559
+    },
+    "remaining_fixtures": 0,
+    "next_fixture_safety": {
+      "next_fixture_id": 10123,
+      "existing_item_references": 0,
+      "existing_log_references": 0
+    },
+    "matches_expected_baseline": true,
+    "safe": true
+  },
+  "source_files_unchanged": true,
+  "monitor_errors": [],
+  "execution_error": null,
+  "phase_markers": [
+    {
+      "record_type": "marker",
+      "name": "official_test_running",
+      "utc": "2026-11-27T11:43:17.134819+00:00",
+      "elapsed_s": 3.068303
+    },
+    {
+      "record_type": "marker",
+      "name": "official_process_launched",
+      "utc": "2026-11-27T11:43:17.146043+00:00",
+      "elapsed_s": 3.079532
+    },
+    {
+      "record_type": "marker",
+      "name": "official_test_completed",
+      "utc": "2026-11-27T11:43:30.782071+00:00",
+      "elapsed_s": 16.715562
+    },
+    {
+      "record_type": "marker",
+      "name": "post_fixture_check",
+      "utc": "2026-11-27T11:43:30.782282+00:00",
+      "elapsed_s": 16.715759
+    },
+    {
+      "record_type": "marker",
+      "name": "post_test_settled",
+      "utc": "2026-11-27T11:43:30.952930+00:00",
+      "elapsed_s": 16.88642
+    },
+    {
+      "record_type": "marker",
+      "name": "monitoring_completed",
+      "utc": "2026-11-27T11:43:33.054579+00:00",
+      "elapsed_s": 18.988067
+    }
+  ],
+  "relevant_samples": [
+    {
+      "record_type": "sample",
+      "sample_number": 1,
+      "phase": "baseline",
+      "elapsed_s": 2.432856,
+      "query_duration_ms": 34.754,
+      "sampled_at": "2026-11-27T11:43:16.526768+00:00",
+      "database_connections_excluding_monitor": 2,
+      "database_connections_including_monitor": 3,
+      "cluster_client_connections_including_monitor": 3,
+      "active_connections_excluding_monitor": 0,
+      "active_connections_including_monitor": 1,
+      "active_checkout_connections": 0,
+      "oldest_active_checkout_ms": null,
+      "events": [
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 2,
+          "active_checkout_count": 0
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 18,
+      "phase": "official_test_running",
+      "elapsed_s": 10.948059,
+      "query_duration_ms": 88.243,
+      "sampled_at": "2026-11-27T11:43:25.053559+00:00",
+      "database_connections_excluding_monitor": 388,
+      "database_connections_including_monitor": 389,
+      "cluster_client_connections_including_monitor": 394,
+      "active_connections_excluding_monitor": 0,
+      "active_connections_including_monitor": 1,
+      "active_checkout_connections": 0,
+      "oldest_active_checkout_ms": null,
+      "events": [
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 387,
+          "active_checkout_count": 0
+        },
+        {
+          "state": null,
+          "wait_event_type": null,
+          "wait_event": null,
+          "connection_count": 1,
+          "active_checkout_count": 0
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 19,
+      "phase": "official_test_running",
+      "elapsed_s": 11.434737,
+      "query_duration_ms": 1770.666,
+      "sampled_at": "2026-11-27T11:43:26.300188+00:00",
+      "database_connections_excluding_monitor": 402,
+      "database_connections_including_monitor": 403,
+      "cluster_client_connections_including_monitor": 403,
+      "active_connections_excluding_monitor": 380,
+      "active_connections_including_monitor": 381,
+      "active_checkout_connections": 380,
+      "oldest_active_checkout_ms": 1909.77,
+      "events": [
+        {
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "connection_count": 288,
+          "active_checkout_count": 288
+        },
+        {
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "LockManager",
+          "connection_count": 71,
+          "active_checkout_count": 71
+        },
+        {
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "BufferContent",
+          "connection_count": 21,
+          "active_checkout_count": 21
+        },
+        {
+          "state": "idle",
+          "wait_event_type": null,
+          "wait_event": null,
+          "connection_count": 16,
+          "active_checkout_count": 0
+        },
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 6,
+          "active_checkout_count": 0
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 20,
+      "phase": "official_test_running",
+      "elapsed_s": 13.72049,
+      "query_duration_ms": 85.106,
+      "sampled_at": "2026-11-27T11:43:27.827656+00:00",
+      "database_connections_excluding_monitor": 380,
+      "database_connections_including_monitor": 381,
+      "cluster_client_connections_including_monitor": 381,
+      "active_connections_excluding_monitor": 378,
+      "active_connections_including_monitor": 379,
+      "active_checkout_connections": 378,
+      "oldest_active_checkout_ms": 2616.967,
+      "events": [
+        {
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "LockManager",
+          "connection_count": 167,
+          "active_checkout_count": 167
+        },
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "connection_count": 160,
+          "active_checkout_count": 160
+        },
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "connection_count": 43,
+          "active_checkout_count": 43
+        },
+        {
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "connection_count": 7,
+          "active_checkout_count": 7
+        },
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 2,
+          "active_checkout_count": 0
+        },
+        {
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "connection_count": 1,
+          "active_checkout_count": 1
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 21,
+      "phase": "official_test_running",
+      "elapsed_s": 14.210615,
+      "query_duration_ms": 48.318,
+      "sampled_at": "2026-11-27T11:43:28.303737+00:00",
+      "database_connections_excluding_monitor": 355,
+      "database_connections_including_monitor": 356,
+      "cluster_client_connections_including_monitor": 356,
+      "active_connections_excluding_monitor": 353,
+      "active_connections_including_monitor": 354,
+      "active_checkout_connections": 353,
+      "oldest_active_checkout_ms": 3062.43,
+      "events": [
+        {
+          "state": "active",
+          "wait_event_type": "LWLock",
+          "wait_event": "LockManager",
+          "connection_count": 269,
+          "active_checkout_count": 269
+        },
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "connection_count": 82,
+          "active_checkout_count": 82
+        },
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 2,
+          "active_checkout_count": 0
+        },
+        {
+          "state": "active",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 1,
+          "active_checkout_count": 1
+        },
+        {
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "connection_count": 1,
+          "active_checkout_count": 1
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 22,
+      "phase": "official_test_running",
+      "elapsed_s": 14.715023,
+      "query_duration_ms": 14.011,
+      "sampled_at": "2026-11-27T11:43:28.78868+00:00",
+      "database_connections_excluding_monitor": 290,
+      "database_connections_including_monitor": 291,
+      "cluster_client_connections_including_monitor": 291,
+      "active_connections_excluding_monitor": 288,
+      "active_connections_including_monitor": 289,
+      "active_checkout_connections": 288,
+      "oldest_active_checkout_ms": 3532.224,
+      "events": [
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "connection_count": 286,
+          "active_checkout_count": 286
+        },
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 2,
+          "active_checkout_count": 0
+        },
+        {
+          "state": "active",
+          "wait_event_type": "IO",
+          "wait_event": "WalSync",
+          "connection_count": 1,
+          "active_checkout_count": 1
+        },
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "connection_count": 1,
+          "active_checkout_count": 1
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 25,
+      "phase": "official_test_running",
+      "elapsed_s": 16.217898,
+      "query_duration_ms": 9.626,
+      "sampled_at": "2026-11-27T11:43:30.283738+00:00",
+      "database_connections_excluding_monitor": 38,
+      "database_connections_including_monitor": 39,
+      "cluster_client_connections_including_monitor": 39,
+      "active_connections_excluding_monitor": 35,
+      "active_connections_including_monitor": 36,
+      "active_checkout_connections": 35,
+      "oldest_active_checkout_ms": 5017.501,
+      "events": [
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "tuple",
+          "connection_count": 33,
+          "active_checkout_count": 33
+        },
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 3,
+          "active_checkout_count": 0
+        },
+        {
+          "state": "active",
+          "wait_event_type": "Lock",
+          "wait_event": "transactionid",
+          "connection_count": 1,
+          "active_checkout_count": 1
+        },
+        {
+          "state": "active",
+          "wait_event_type": null,
+          "wait_event": null,
+          "connection_count": 1,
+          "active_checkout_count": 1
+        }
+      ]
+    },
+    {
+      "record_type": "sample",
+      "sample_number": 30,
+      "phase": "post_test_settled",
+      "elapsed_s": 18.709808,
+      "query_duration_ms": 3.12,
+      "sampled_at": "2026-11-27T11:43:32.774865+00:00",
+      "database_connections_excluding_monitor": 2,
+      "database_connections_including_monitor": 3,
+      "cluster_client_connections_including_monitor": 3,
+      "active_connections_excluding_monitor": 0,
+      "active_connections_including_monitor": 1,
+      "active_checkout_connections": 0,
+      "oldest_active_checkout_ms": null,
+      "events": [
+        {
+          "state": "idle",
+          "wait_event_type": "Client",
+          "wait_event": "ClientRead",
+          "connection_count": 2,
+          "active_checkout_count": 0
+        }
+      ]
+    }
+  ],
+  "logs": {
+    "monitor": "tests\\phase2\\logs\\wait_events_20261127T114314Z_e0da706e.jsonl",
+    "race": "tests\\phase2\\logs\\official_test2_20261127T114314Z_e0da706e.log",
+    "fixture_checks": "tests\\phase2\\logs\\fixture_safety_20261127T114314Z_e0da706e.jsonl",
+    "summary": "tests\\phase2\\logs\\investigation4_summary_20261127T114314Z_e0da706e.log"
+  },
+  "limitations": [
+    "0.5-second samples can miss short waits and the true connection peak.",
+    "Counts include other client sessions in this database; the monitoring connection is separately included/excluded.",
+    "No-wait active backends may be executing or waiting for CPU; absence of a wait event is not a CPU measurement.",
+    "Repeated backend observations are samples, not distinct callers or exact cumulative wait durations.",
+    "The official wall clock includes thread creation, connection establishment, barrier synchronization, checkout and connection closing.",
+    "No barrier timestamp was instrumented because the official harness was not modified.",
+    "This run adds a monitoring connection; it is not directly subtractable from separately measured baselines."
+  ],
+  "active_connections_with_no_reported_wait_peak": 288,
+  "baseline_other_client_connections": 2,
+  "final_other_client_connections": 2,
+  "preliminary_interpretation": {
+    "confirmed": [
+      "The actual official Test 2 passed with 50 successful purchases, 350 refusals, zero errors and a reported 12.89-second fire() wall clock.",
+      "Connection counts increased while sampled sessions were idle or starting and no active checkout call was observed, followed by many active checkout sessions and lock-related waits.",
+      "Tuple locks, transaction-ID locks, internal LockManager/BufferContent LWLocks and WalSync I/O waits were observed during active checkout calls.",
+      "The run returned to two baseline non-monitor client connections; fixture checks passed before and after.",
+      "No separate blocking-chain, CPU utilization, per-wait-duration, barrier-release or disk-latency measurements were collected."
+    ],
+    "hypotheses": [
+      "Connected buyers waiting at the Python barrier plausibly explain much of the idle/ClientRead connection-ramp phase.",
+      "Concurrent updates of one fixture product plausibly explain checkout lock contention; exact blocking objects and chains were not captured.",
+      "Lock-manager concurrency overhead and row/transaction contention may both contribute after checkout starts; their shares of total wall time cannot be determined from snapshots.",
+      "The sampled WalSync waits may affect the serialized commit path, even though only one backend was observed in this event at a time."
+    ],
+    "not_established": "No single primary bottleneck, exact connection-versus-checkout timing split, or causal explanation for the difference from the prior 16.10-second run has been established."
+  },
+  "execution_notes": [
+    "Only monitoring SQL was changed; no new implementation or benchmark scripts were saved.",
+    "The unsupported/ambiguous trailing positional 80 in the old watch invocation was replaced with explicit interval=0.5 count=240. The old run was not reproduced and its termination cause remains unconfirmed.",
+    "The diagnostic driver executed the actual monitoring SELECT repeatedly through an autocommit connection until after the official process, fixture recheck and settled samples; it did not run psql watch.",
+    "DATABASE_URL was absent from process/user/machine environment. A process-only value was constructed privately from kloudkart_rebuild settings, validated for 127.0.0.1:5433, and inherited by the unchanged race process.",
+    "No sampling/SQL/race execution errors were observed. Activity sampling itself slowed to a 1.771-second query and a 2.286-second interval at peak load.",
+    "Unchanged row counts and empty fixture checks establish count reconciliation, not a row-by-row historical data comparison. The official test advances generated-ID sequences and creates/deletes its authorized synthetic fixtures."
+  ]
+}

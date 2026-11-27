@@ -1,0 +1,101 @@
+Investigation 6 - Checkout Transaction Duration and Lock-Holding Time
+Run: 20261127T121501Z_7384c1d4; one instrumented trial; all timing values below are milliseconds unless labelled seconds.
+
+Outcome: 400 buyers; 50 successful purchases; 350 out-of-stock refusals; 0 errors; final stock 0.
+Workload wall time: 21.109016 seconds.
+Before barrier release (thread startup, connection establishment, barrier): 11.330176 seconds.
+After barrier release through connection closure and joins: 9.778840 seconds.
+Wall time excludes fixture/schema installation, clock calibration and post-run validation/cleanup.
+This is a diagnostic-copy run, not an execution of the official race_test.py.
+
+Confirmed transaction boundary:
+- race_test.py opens one connection per worker, enables autocommit, waits at the 400-worker barrier, executes the checkout SELECT, fetches the result and closes the connection.
+- No explicit commit() call occurs in official workers. Each SELECT runs in its own implicit transaction. The function return does not itself release the product-row lock; it remains held until transaction end.
+- The diagnostic runner uses the same worker connection/barrier/autocommit boundary, without extra per-worker clock queries or explicit commits.
+- All 400 worker connections reported transaction status IDLE after checkout execute/fetch, confirming no open transaction remained at that point.
+- Official fire() wall time includes opening connections, barrier wait, checkout, closing connections and thread joins; per-call elapsed excludes connection establishment.
+
+Timing table: average / median / maximum (ms). Dash means operation did not execute.
+Operation | Successful purchases (n=50) | Refused purchases (n=350)
+Connection open | 3011.207 / 2308.606 / 6567.271 | 3193.991 / 3468.412 / 7008.905
+Before stock UPDATE (derived residual) | 1686.689 / 1892.814 / 3714.114 | 1672.029 / 1728.067 / 3901.407
+Stock UPDATE including lock acquisition waits | 1448.357 / 1395.925 / 3983.353 | 4756.390 / 4737.167 / 9103.084
+Order INSERT | 33.857 / 3.384 / 1183.010 | -
+Order-item INSERT | 19.082 / 0.778 / 791.300 | -
+Inventory-log INSERT | 5.955 / 1.668 / 85.355 | -
+Total instrumented function | 3204.676 / 3350.809 / 4908.155 | 6430.851 / 6530.596 / 9169.099
+Stock UPDATE completion to near-return timestamp | 69.630 / 13.839 / 2466.649 | 2.432 / 1.855 / 17.796
+Client SELECT execute + fetch | 4464.803 / 4634.649 / 5265.115 | 7628.344 / 7667.547 / 9763.909
+Near-return to client acknowledgement estimate | 39.427 / 23.587 / 156.059 | 10.583 / 8.555 / 294.883
+Stock UPDATE completion to client acknowledgement estimate | 109.057 / 37.249 / 2622.708 | 13.015 / 11.115 / 296.030
+
+Commit and lock-duration measurement limits:
+- Exact individual commit durations: unavailable with this autocommit protocol; separate_commit_duration_ms is null. Timing conn.commit() here would time a no-op. Switching to explicit commit after fetching would add a client handoff while holding the lock and change the official boundary.
+- Stock UPDATE times combine waiting to acquire locks, planning/executor work, the actual update and scheduling. There is no internal lock-acquired timestamp, so lock wait and actual UPDATE execution cannot be separated by these measurements.
+- The last server clock_timestamp() is immediately before RETURN NEXT, rather than the exact function exit. Result construction and statement completion follow it.
+- Clock mapping uses the shortest of 9 control-connection timestamp round trips before and after the workload. No calibration queries run inside workers or inside the workload wall timer.
+- Pre-run best calibration RTT: 1.202400 ms; post-run: 1.268400 ms.
+- The combined pre/post server-to-client monotonic clock offset bracket is 2.995014 ms wide (approximately +/- 1.497507 ms around each midpoint estimate). Pre/post brackets do not overlap; clock offset shifted during the run. The envelope assumes no unobserved transient clock step outside it.
+- Near-return-to-acknowledgement includes remaining server return/result work, implicit commit, network/protocol delivery and client thread scheduling. It is not isolated commit or WAL-flush time.
+- For each SUCCESSFUL checkout, the product-row lock is already held when UPDATE completes. Completion-to-commit is at least the subsequent measured server interval and, subject to clock assumptions, no more than completion-to-client-acknowledgement upper bound.
+- Distribution of per-call lower bounds (avg/median/max): 69.630 / 13.839 / 2466.649 ms.
+- Distribution of per-call upper bounds (avg/median/max): 110.554 / 38.747 / 2624.206 ms.
+- Midpoint-based completion-to-ack estimates (avg/median/max): 109.057 / 37.249 / 2622.708 ms; they overestimate the completion-to-commit interval by including acknowledgement overhead.
+- These bounds begin AFTER the UPDATE. They exclude any time for which the row lock was already held inside UPDATE, so they are not exact bounds on its entire holding time. Do not apply successful-update holding interpretations to stock-refused calls.
+- Bounds, clock mapping and acknowledgement tails are retained individually for all 400 buyers in checkout_stages JSONL; the lower bound equals post_update_function_ms, and the upper equals stock_completed_to_ack_high_ms for each successful buyer.
+
+Confirmed observations:
+- Refused calls spent substantially longer inside stock UPDATE on average (4756.390 ms) than successful calls (1448.357 ms). Investigation 5 had already established contention on the synthetic product tuple; this trial does not separately quantify lock waiting.
+- The pre-UPDATE residual averages 1686.689 ms for successes and 1672.029 ms for refusals. It covers input/customer validation, first-use statement planning and time/scheduling between entry and UPDATE start; these components are not separately timed.
+- Total function time includes these uninstrumented pre-UPDATE intervals and control-flow/timestamp overhead, so named SQL stages alone do not sum to total function time.
+- The longest successful post-UPDATE interval is 2466.649 ms. In that SAME synthetic call, order INSERT took 1183.010 ms, order-item INSERT 791.300 ms and inventory-log INSERT 85.355 ms. Its stock UPDATE took 4.003 ms and its completion-to-ack estimate was 2622.708 ms.
+- Therefore at least one successful transaction held the product-row lock for at least 2466.649 ms AFTER completing its stock UPDATE, before commit. The corresponding upper bound on that post-UPDATE interval is 2624.206 ms under the clock assumptions.
+- Refusals executed no order, order-item or inventory-log inserts. Their post-UPDATE interval includes the original refusal lookup and result construction, not successful checkout writes.
+- The function body deployed in public matched the inspected source after comment/whitespace normalization.
+- Two other client connections existed at preflight. Their activity during this trial was not monitored; they were not changed or terminated.
+
+Hypotheses and limits:
+- Queueing behind transactions that continue inserting/committing after stock deduction is consistent with the existing contention evidence and the measured post-UPDATE intervals.
+- Planning/initialization, CPU or storage scheduling, or other resource contention could contribute to the large pre-UPDATE and INSERT outliers. This trial does not identify their cause or prove any one operation is the primary bottleneck.
+- The 11.330-second pre-barrier phase remains substantial. It includes concurrent connection setup and Python thread/barrier scheduling; it is not a pure server connection-cost measurement.
+- One trial, first-use function/statement overhead, extra timestamp/result fields, host load, other sessions and clock uncertainty limit comparison with prior official runs. The 21.109-second result must not be treated as a measured regression of the unchanged official function.
+- No additional official Test 2 run or optimization was performed for this investigation.
+
+Fixture and database-object safety:
+- Only the rebuilt endpoint 127.0.0.1:5433/postgres as postgres was used. Its cluster fingerprint matched docker container kloudkart_rebuild. PostgreSQL 18.7; maximum connections 500.
+- DATABASE_URL was absent from this process. For this run only, credentials were obtained privately from the named rebuilt container and supplied to the child process environment; no credential was printed or written to files.
+- Existing valid customer selected internally; customer and order identifiers are omitted from diagnostic output. Buyer indexes are synthetic runner slots.
+- Before testing, the existing check_fixture_cleanup.sql was executed: no remaining official fixtures and no historical order-item or inventory references to the candidate fixture.
+- The workload added exactly 1 product, 50 orders, 50 order items and 50 inventory-log rows, with inventory net change -50.
+- Cleanup removed exactly those counts in one transaction, using the exact synthetic product ID and unique product name. Related orders were checked for references to other products before deletion.
+- check_fixture_cleanup.sql was repeated afterwards: zero remaining fixtures and zero references to the next candidate fixture.
+- All six historical counts were restored:
+  categories: 94 before = 94 after
+  customers: 40420 before = 40420 after
+  inventory_log: 282352 before = 282352 after
+  order_items: 336559 before = 336559 after
+  orders: 159384 before = 159384 after
+  products: 4023 before = 4023 after
+- The unique diagnostic function and its dedicated schema were dropped without CASCADE; schema absence was confirmed.
+- public.place_order definition, public index definitions and noninternal trigger definitions had matching pre/post fingerprints.
+- race_test.py and functions/phase2_place_order.sql SHA-256 hashes matched before/after; race_test.py also matched the original supplied Git version.
+- All 33 preexisting non-data project files matched their initial SHA-256 hashes; branch remains new and HEAD is unchanged. No existing project file was modified or removed.
+- No index/configuration changes, permanent timing table, sequence reset, original-container connection, commit or push was performed. Normal synthetic inserts can consume sequence values; sequence allocation was not reset.
+- No workload, validation or cleanup error was reported.
+
+Artifacts:
+- tests/phase2/benchmark_checkout_stages.py
+- tests/phase2/place_order_timed.sql (schema placeholder; installed only by the guarded runner)
+- tests/phase2/logs/place_order_timed_20261127T121501Z_7384c1d4.sql (exact SQL installed for this run; now dropped)
+- tests/phase2/logs/checkout_stages_20261127T121501Z_7384c1d4.jsonl (400 individual anonymous buyer records)
+- tests/phase2/logs/checkout_benchmark_20261127T121501Z_7384c1d4.log (aggregate results and fingerprints)
+- tests/phase2/logs/checkout_fixture_safety_20261127T121501Z_7384c1d4.jsonl (before, after workload, after cleanup)
+- tests/phase2/logs/investigation6_summary.log (this report)
+- The runner received small post-run reporting/exception-cleanup refinements: derived pre-UPDATE and lock interval bound fields, and joining started threads if thread startup fails. These did not change the timed SQL or measured workload. This summary derives those fields from the original, preserved raw measurements; no repeat run was needed.
+
+References:
+https://www.postgresql.org/docs/18/sql-begin.html - implicit statement transactions and commit.
+https://www.postgresql.org/docs/18/explicit-locking.html - row locks retained until transaction end.
+https://www.psycopg.org/docs/connection.html#connection.autocommit - psycopg2 transaction/autocommit behavior.
+
+Investigation 6 complete. No optimization or Git publication performed.

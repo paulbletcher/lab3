@@ -1,7 +1,0 @@
-﻿Active synthetic fixtures (fresh connection): 0
-Active test failure triggers (fresh connection): 0
-Locking test databases (fresh connection): 0
-Active cleanup: PASS
-All six active tables: pre/post row counts and ordered full-row MD5 fingerprints unchanged; PASS.
-All prior evidence and race_test.py: SHA-256 unchanged; PASS.
-Disposable atomic verification containers remaining: 0; PASS.

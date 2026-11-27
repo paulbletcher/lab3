@@ -1,0 +1,447 @@
+{
+  "created_at": "20261127T125337Z",
+  "credential_origin": "private named-container environment; subprocess only",
+  "environment": [
+    {
+      "columns": [
+        "name",
+        "setting",
+        "unit"
+      ],
+      "rows": [
+        [
+          "effective_cache_size",
+          "524288",
+          "8kB"
+        ],
+        [
+          "fsync",
+          "on",
+          null
+        ],
+        [
+          "huge_pages",
+          "try",
+          null
+        ],
+        [
+          "jit",
+          "on",
+          null
+        ],
+        [
+          "jit_above_cost",
+          "100000",
+          null
+        ],
+        [
+          "max_connections",
+          "500",
+          null
+        ],
+        [
+          "max_parallel_workers_per_gather",
+          "2",
+          null
+        ],
+        [
+          "server_version",
+          "18.7 (Debian 18.7-1.pgdg13+5)",
+          null
+        ],
+        [
+          "shared_buffers",
+          "16384",
+          "8kB"
+        ],
+        [
+          "ssl",
+          "off",
+          null
+        ],
+        [
+          "synchronous_commit",
+          "on",
+          null
+        ],
+        [
+          "work_mem",
+          "4096",
+          "kB"
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "schemaname",
+        "tablename",
+        "indexname",
+        "indexdef"
+      ],
+      "rows": [
+        [
+          "public",
+          "categories",
+          "categories_pkey",
+          "CREATE UNIQUE INDEX categories_pkey ON public.categories USING btree (category_id)"
+        ],
+        [
+          "public",
+          "customers",
+          "customers_pkey",
+          "CREATE UNIQUE INDEX customers_pkey ON public.customers USING btree (customer_id)"
+        ],
+        [
+          "public",
+          "inventory_log",
+          "inventory_log_pkey",
+          "CREATE UNIQUE INDEX inventory_log_pkey ON public.inventory_log USING btree (log_id)"
+        ],
+        [
+          "public",
+          "order_items",
+          "order_items_pkey",
+          "CREATE UNIQUE INDEX order_items_pkey ON public.order_items USING btree (order_item_id)"
+        ],
+        [
+          "public",
+          "orders",
+          "orders_pkey",
+          "CREATE UNIQUE INDEX orders_pkey ON public.orders USING btree (order_id)"
+        ],
+        [
+          "public",
+          "products",
+          "products_pkey",
+          "CREATE UNIQUE INDEX products_pkey ON public.products USING btree (product_id)"
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "nspname",
+        "relname",
+        "pg_get_triggerdef"
+      ],
+      "rows": []
+    },
+    {
+      "columns": [
+        "state",
+        "wait_event_type",
+        "wait_event",
+        "count"
+      ],
+      "rows": [
+        [
+          "idle",
+          "Client",
+          "ClientRead",
+          2
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "QUERY PLAN"
+      ],
+      "rows": [
+        [
+          [
+            {
+              "Plan": {
+                "Alias": "customers",
+                "Async Capable": false,
+                "Disabled": false,
+                "Index Cond": "(customer_id = (InitPlan 2).col1)",
+                "Index Name": "customers_pkey",
+                "Node Type": "Index Only Scan",
+                "Parallel Aware": false,
+                "Plan Rows": 1,
+                "Plan Width": 4,
+                "Plans": [
+                  {
+                    "Async Capable": false,
+                    "Disabled": false,
+                    "Node Type": "Result",
+                    "Parallel Aware": false,
+                    "Parent Relationship": "InitPlan",
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Plans": [
+                      {
+                        "Async Capable": false,
+                        "Disabled": false,
+                        "Node Type": "Limit",
+                        "Parallel Aware": false,
+                        "Parent Relationship": "InitPlan",
+                        "Plan Rows": 1,
+                        "Plan Width": 4,
+                        "Plans": [
+                          {
+                            "Alias": "customers_1",
+                            "Async Capable": false,
+                            "Disabled": false,
+                            "Index Name": "customers_pkey",
+                            "Node Type": "Index Only Scan",
+                            "Parallel Aware": false,
+                            "Parent Relationship": "Outer",
+                            "Plan Rows": 40420,
+                            "Plan Width": 4,
+                            "Relation Name": "customers",
+                            "Scan Direction": "Forward",
+                            "Startup Cost": 0.29,
+                            "Total Cost": 1066.59
+                          }
+                        ],
+                        "Startup Cost": 0.29,
+                        "Subplan Name": "InitPlan 1",
+                        "Total Cost": 0.32
+                      }
+                    ],
+                    "Startup Cost": 0.32,
+                    "Subplan Name": "InitPlan 2",
+                    "Total Cost": 0.33
+                  }
+                ],
+                "Relation Name": "customers",
+                "Scan Direction": "Forward",
+                "Startup Cost": 0.62,
+                "Total Cost": 8.64
+              }
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "QUERY PLAN"
+      ],
+      "rows": [
+        [
+          [
+            {
+              "Plan": {
+                "Alias": "products",
+                "Async Capable": false,
+                "Disabled": false,
+                "Node Type": "ModifyTable",
+                "Operation": "Update",
+                "Parallel Aware": false,
+                "Plan Rows": 0,
+                "Plan Width": 0,
+                "Plans": [
+                  {
+                    "Async Capable": false,
+                    "Disabled": false,
+                    "Node Type": "Result",
+                    "Parallel Aware": false,
+                    "Parent Relationship": "InitPlan",
+                    "Plan Rows": 1,
+                    "Plan Width": 8,
+                    "Plans": [
+                      {
+                        "Async Capable": false,
+                        "Disabled": false,
+                        "Node Type": "Limit",
+                        "Parallel Aware": false,
+                        "Parent Relationship": "InitPlan",
+                        "Plan Rows": 1,
+                        "Plan Width": 4,
+                        "Plans": [
+                          {
+                            "Alias": "products_1",
+                            "Async Capable": false,
+                            "Disabled": false,
+                            "Index Name": "products_pkey",
+                            "Node Type": "Index Only Scan",
+                            "Parallel Aware": false,
+                            "Parent Relationship": "Outer",
+                            "Plan Rows": 4325,
+                            "Plan Width": 4,
+                            "Relation Name": "products",
+                            "Scan Direction": "Backward",
+                            "Startup Cost": 0.28,
+                            "Total Cost": 124.16
+                          }
+                        ],
+                        "Startup Cost": 0.28,
+                        "Subplan Name": "InitPlan 1",
+                        "Total Cost": 0.31
+                      }
+                    ],
+                    "Startup Cost": 0.31,
+                    "Subplan Name": "InitPlan 2",
+                    "Total Cost": 0.33
+                  },
+                  {
+                    "Alias": "products",
+                    "Async Capable": false,
+                    "Disabled": false,
+                    "Filter": "((price IS NOT NULL) AND (stock_quantity >= 1) AND (price >= '0'::numeric))",
+                    "Index Cond": "(product_id = (InitPlan 2).col1)",
+                    "Index Name": "products_pkey",
+                    "Node Type": "Index Scan",
+                    "Parallel Aware": false,
+                    "Parent Relationship": "Outer",
+                    "Plan Rows": 1,
+                    "Plan Width": 10,
+                    "Relation Name": "products",
+                    "Scan Direction": "Forward",
+                    "Startup Cost": 0.28,
+                    "Total Cost": 8.31
+                  }
+                ],
+                "Relation Name": "products",
+                "Startup Cost": 0.61,
+                "Total Cost": 8.63
+              }
+            }
+          ]
+        ]
+      ]
+    }
+  ],
+  "file_sha256": {
+    ".gitignore": "62235a3d4607ba1defe00dfb7a8f5c82b5c58c2e1c2701f63b77b2e829da43b6",
+    "README.md": "5ec8d10cefd7e043f440afce0eacc0a4882c3e5c700809efeb008a07ee65c6cd",
+    "data/categories.csv": "65f77f0247cf0d1f6590ee57a6a5cf42ba222943b5c33b91ef5ff4b54f6050f9",
+    "data/customers.csv": "e6b5a096aa88ff86363b34abbcbbbff1b01187444c9a65fc346c1966260d9ea2",
+    "data/inventory_log.csv": "7bc90c67f78d5d9b169ae9735dd45acab7a7633ef9a657fb3a9cd9577bebeb4a",
+    "data/order_items.csv": "ee33cd49579ecb1547682a3747881f0ebe5990fa51e7d815f118fa7d9dc6cce3",
+    "data/orders.csv": "28e54736e1bb17f291041b9cd1f2be59f615dd4eac6365e2100af650f30001ae",
+    "data/products.csv": "5d8d12635139f785c982d8ffcf777364f5cac68279088a88e729348149e7445f",
+    "docs/diagnosis.md": "5b01e761426bc80e3cf93ae8c13cbd41fc4dfd64b0e48e7b4dbea26755766ecd",
+    "docs/phase0_results.md": "d1bbbf548799eb90314e1f3dbb44613e9dfd0fb78e3dd51549a96938b656bffd",
+    "docs/phase1_results.md": "7f102f5cf8f888b2cadc6d167d4a9fef429c0ebeb1a96231156e81f00d073f3f",
+    "docs/phase2_experiments.md": "fe16c27d806ee32bb7ad0e3fadf5d1cdabfcef23b2857b17cdb9ea1aa20047cb",
+    "docs/phase2_performance.md": "91370a96e97408332a78677a8c2963a63132f8189845cc44aa67d92949499e7a",
+    "functions/phase2_place_order.sql": "b02727f62e1ab070eca772c51edbe85522621a81a4a7b32ddf9e442be00c6d7e",
+    "integrity_checks.sql": "b56b7b4031e692a23f1b35000a6cdcbd79bbb05bdcb2b5d72df2e9bca8221ac5",
+    "load.sql": "c0432f353e71611169ea0cac62a523f7cd2727867cd567c6de3081c8ce5f2e6a",
+    "migrations/phase2_create_id_sequences.sql": "19673d438d63414669dd1b21338da959c9f524428504515bf512d57001f4f991",
+    "race_test.py": "5f12a6697400dee3876dfa33a03fbdcc1dc906f665f3c0a6aaeffe73cdb27d00",
+    "run_all.sql": "fd3659d12bbded6f7b5b047d8f45326cb3363718fe5e2c88a4746fb8ce408c0c",
+    "schema.sql": "f23c11f464121cf1baa2f36732b03e9b15832f19f69f85a4cb6623a509ac16d9",
+    "setup_checks.sql": "422cfaf5a43ab4c43e5efd5a16eaa170158164fd28c11abd5de0a952bfa20391",
+    "tests/phase2/benchmark_checkout_stages.py": "8764d7ade150ef68e42e94fea4a8868295095ea48d1bee9ffd4192730655bfc6",
+    "tests/phase2/benchmark_connections.py": "4a90ccc525058c83ddf8daaa7144ff51ca4f4a5860dc0f0c39cac652786a42ae",
+    "tests/phase2/check_fixture_cleanup.sql": "d1a1e69c7a316ad348b8b9c42e50ba11c193fbafd15c5b4bceb182d647ec26e6",
+    "tests/phase2/connection_probe.sql": "318979dbfc8be1ac451ddc513c804246824a3b4044c81236f5ad2cd4a8fc63ae",
+    "tests/phase2/inspect_id_generation.sql": "e49d77cf258fb4c28c1c67b0a66b2bbcb759923b04a959e5b01e55f7b23935e3",
+    "tests/phase2/investigate_blocking.sql": "999abbfc484c199c03ef70f6af68ad5e231b55b3f16b925ff1dcb89441f87d5f",
+    "tests/phase2/investigate_flash_sale.sql": "735fecfcf6503a28b25e5c4d045d5d82e1f1bc4090fb69146e5c11338e339384",
+    "tests/phase2/logs/blocking_fixture_safety_20261127T120026Z_f389c337.jsonl": "500ff7543647d2f638713f0792769a8f18ca3604ff823f395986e60a8f03ca3f",
+    "tests/phase2/logs/blocking_official_test2_20261127T120026Z_f389c337.log": "b1fb9154b782fadab16b9f223fe1d6d3aac6af1e880d8eed19aab6d1b6ffc6e0",
+    "tests/phase2/logs/blocking_samples_20261127T120026Z_f389c337.jsonl": "daa80ce90cffdcf7ea430767b632efe9d442417342fb93389cb750fc49aee8f5",
+    "tests/phase2/logs/checkout_benchmark_20261127T121501Z_7384c1d4.log": "4eec5f66d0bd6099297cc5b5d0fe90e220e25e55d7f62a5a01a750828a573ca7",
+    "tests/phase2/logs/checkout_fixture_safety_20261127T121501Z_7384c1d4.jsonl": "47777d34c8871b51d66e9a4064041d98b509a3abb9775303b9e3433e253ff4d8",
+    "tests/phase2/logs/checkout_stages_20261127T121501Z_7384c1d4.jsonl": "2f2f79ae32114596fc3d0f0129ca2550ede5c356ef78647107d1f80fd2bfeabf",
+    "tests/phase2/logs/fixture_safety_20261127T114314Z_e0da706e.jsonl": "73601962e7f5771bc3ec926fe4e486c0594c7d531c105cba3cfc961a4e5f5e25",
+    "tests/phase2/logs/investigate_blocking_20261127T120026Z_f389c337.sql": "999abbfc484c199c03ef70f6af68ad5e231b55b3f16b925ff1dcb89441f87d5f",
+    "tests/phase2/logs/investigation4_summary_20261127T114314Z_e0da706e.log": "e4d0e3d47248551fc125b45c181ce954131d7994f4fa9669c64c80d36603e64e",
+    "tests/phase2/logs/investigation5_summary_20261127T120026Z_f389c337.log": "672fd9b811cb86705b994ca70419fc6a5359300e5a6e08b5991ecb839cbe8e4f",
+    "tests/phase2/logs/investigation6_summary.log": "20f0e28d8cc7036f00e749ee2ccb27197ec5efed1712b8ca982e77e15392df73",
+    "tests/phase2/logs/official_test2_20261127T114314Z_e0da706e.log": "2aa6ece7b359318a3e555accafa60c50b6c3bb56e358992598fc3bec3f406d3b",
+    "tests/phase2/logs/place_order_timed_20261127T121501Z_7384c1d4.sql": "6c032da85f19327670ccf482f7d48dc1c4eaf4f41f52cb13d30bdc1600f5f17e",
+    "tests/phase2/logs/wait_events_20261127T114314Z_e0da706e.jsonl": "2807f2c04c80b7619b803065a509969e3be556f57a89a586658be81405251386",
+    "tests/phase2/monitor_flash_sale.sql": "9fa1bea2642ffb0cf2016883996e8df57772c4cd0c334d3eab1f53a55eff52c1",
+    "tests/phase2/place_order_timed.sql": "eb3c46d531b4805ca854cb60bb40ceb6e6ac1a19211447900682c28f55371ca2",
+    "tests/phase2/test_place_order.sql": "689064291598b911f343c21efdceb915fddd0d6b210004dba1cfa627a209600d",
+    "tests/phase2/verify_id_generation.sql": "04539b68e1ff3410901c15082e41a175fe66ee94ec9fcc015f3302ad2120f060",
+    "tests/phase3/backups/deployed_place_order_original.sql": "1ae1ada5e9c93a1d3b08d8f798d436f8bb59e5c92509533d78cca92621a52733",
+    "tests/phase3/backups/phase2_place_order_original.sql": "b02727f62e1ab070eca772c51edbe85522621a81a4a7b32ddf9e442be00c6d7e",
+    "tests/phase3/inspect_environment.sql": "640282eadb1688866afffc2831351e93d38df01a7e13e5e89a11b8367b4107fe",
+    "tests/phase3/run_experiment.py": "b0ff120e859605cff1c92fa1b71e2820922f9e63065f329ebe0c365ce33bfd3a",
+    "tests/phase3/verify_integrity.sql": "f3d93379227b854157763fe96243aa30ffc8886d46aa3dd906e4c0a178cf3d82"
+  },
+  "git_head": "b07a64cf7e4cf8bd4166726c20f70f0ef6e45a6c",
+  "git_status_before": " M docs/phase2_experiments.md\n M tests/phase2/inspect_id_generation.sql\n?? docs/phase2_performance.md\n?? functions/\n?? migrations/\n?? tests/phase2/benchmark_checkout_stages.py\n?? tests/phase2/benchmark_connections.py\n?? tests/phase2/check_fixture_cleanup.sql\n?? tests/phase2/connection_probe.sql\n?? tests/phase2/investigate_blocking.sql\n?? tests/phase2/investigate_flash_sale.sql\n?? tests/phase2/logs/\n?? tests/phase2/monitor_flash_sale.sql\n?? tests/phase2/place_order_timed.sql\n?? tests/phase2/test_place_order.sql\n?? tests/phase2/verify_id_generation.sql\n?? tests/phase3/\n",
+  "historical_fingerprints": {
+    "categories": [
+      94,
+      "6c816196cdec2bde36633b0125358c9d"
+    ],
+    "customers": [
+      40420,
+      "03938d3f98302dbba1154204f16d4993"
+    ],
+    "inventory_log": [
+      282352,
+      "5e7f047014f68e5d5e5eb7c890980aae"
+    ],
+    "order_items": [
+      336559,
+      "50c5421d9e8748211f236376b698affd"
+    ],
+    "orders": [
+      159384,
+      "7a0c0a0a27f2762a44e7dabefecce1e3"
+    ],
+    "products": [
+      4023,
+      "44b1f90f80addeb3a587134191649e87"
+    ]
+  },
+  "safety": [
+    {
+      "columns": [
+        "table_name",
+        "count"
+      ],
+      "rows": [
+        [
+          "categories",
+          94
+        ],
+        [
+          "customers",
+          40420
+        ],
+        [
+          "inventory_log",
+          282352
+        ],
+        [
+          "order_items",
+          336559
+        ],
+        [
+          "orders",
+          159384
+        ],
+        [
+          "products",
+          4023
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "remaining_fixtures"
+      ],
+      "rows": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "orphan_orders_customer",
+        "orphan_items_order",
+        "orphan_items_product",
+        "orphan_logs_product"
+      ],
+      "rows": [
+        [
+          210,
+          692,
+          0,
+          120
+        ]
+      ]
+    }
+  ]
+}

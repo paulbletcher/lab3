@@ -1,0 +1,13 @@
+DROP TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+psql:schema.sql:5: NOTICE:  table "order_items" does not exist, skipping
+psql:schema.sql:5: NOTICE:  table "orders" does not exist, skipping
+psql:schema.sql:5: NOTICE:  table "inventory_log" does not exist, skipping
+psql:schema.sql:5: NOTICE:  table "products" does not exist, skipping
+psql:schema.sql:5: NOTICE:  table "customers" does not exist, skipping
+psql:schema.sql:5: NOTICE:  table "categories" does not exist, skipping
