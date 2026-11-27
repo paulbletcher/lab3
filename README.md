@@ -8,7 +8,7 @@ This lab examines Kloud Kart's inherited PostgreSQL database and develops safe c
 |---|---|
 | Phase 0 - Environment setup | COMPLETE |
 | Phase 1 - Data diagnosis | COMPLETE |
-| Phase 2 - Safe checkout and inventory audit trail | NOT STARTED |
+| Phase 2 - Safe checkout and inventory audit trail | IN PROGRESS |
 | Phase 3 - Monday customer-spending report | NOT STARTED |
 | Phase 4 - Recursive low-stock category rollup | NOT STARTED |
 | Phase 5 - Additional improvement and final deliverables | NOT STARTED |
@@ -16,6 +16,8 @@ This lab examines Kloud Kart's inherited PostgreSQL database and develops safe c
 All 21 integrity checks are complete. Their observations, business implications, clarification items, reporting considerations, and final risk ranking are documented in [docs/diagnosis.md](docs/diagnosis.md). Aggregate results and schema verification are recorded in [docs/phase1_results.md](docs/phase1_results.md).
 
 No historical records have been corrected or deleted to resolve the findings. The database uses the supplied schema and datasets. Checkout and the inventory audit mechanism are future work.
+
+Phase 2 automatic ID generation is complete: the three purchase-related primary keys use `GENERATED ALWAYS AS IDENTITY`. [Phase 2 verification](docs/phase2_identity.md) records the connection investigation, sequence states, and isolated migration tests. The checkout function and input validation have not been implemented.
 
 ## Active project structure
 
@@ -26,10 +28,15 @@ lab3/
 |-- schema.sql
 |-- load.sql
 |-- integrity_checks.sql
+|-- checkout_prechecks.sql
+|-- checkout.sql
 |-- race_test.py
 |-- docs/
 |   |-- diagnosis.md
-|   `-- phase1_results.md
+|   |-- phase1_results.md
+|   `-- phase2_identity.md
+|-- tests/
+|   `-- verify_identity_migration.py
 `-- data/                       # Confidential extracts; ignored by Git
 ```
 
@@ -38,9 +45,13 @@ lab3/
 | [schema.sql](schema.sql) | Defines the six tables with ordinary integer primary keys. No foreign keys or indexes beyond the primary keys. |
 | [load.sql](load.sql) | Loads six local CSV datasets with client-side `\copy`, runs `ANALYZE`, and reports row counts. |
 | [integrity_checks.sql](integrity_checks.sql) | Contains the 21 Phase 1 diagnosis queries. |
+| [checkout_prechecks.sql](checkout_prechecks.sql) | Read-only connection fingerprint, ID maxima, identity definitions, and exact sequence-state notices. Works before and after migration. |
+| [checkout.sql](checkout.sql) | Repeatable migration to `ALWAYS` identities; advances sequences only when below the safe data boundary. |
 | [race_test.py](race_test.py) | Supplied checkout contract and concurrency test harness for Phase 2. |
 | [docs/diagnosis.md](docs/diagnosis.md) | Integrity observations, business implications, and final risk ranking. |
 | [docs/phase1_results.md](docs/phase1_results.md) | Schema verification, row counts, all 21 check results, and the historical-data preservation policy. |
+| [docs/phase2_identity.md](docs/phase2_identity.md) | Current Phase 2 ID-generation decisions, evidence, and limitations. |
+| [tests/verify_identity_migration.py](tests/verify_identity_migration.py) | Verifies the migration using a disposable database and removes that database afterward. |
 
 ## Environment
 
@@ -74,6 +85,28 @@ docker exec -w /lab -i kloudkart psql -U postgres -d postgres -X -v ON_ERROR_STO
 `schema.sql` drops any existing lab tables before creating the six tables, so it should only be used when intentionally initializing the lab. `load.sql` imports the datasets into empty tables. `ON_ERROR_STOP=1` stops the current script on an SQL error. Client-side `\copy` reads `/lab/data/` because `psql` runs with `/lab` as its working directory.
 
 For diagnosis on an initialized database, execute only `integrity_checks.sql`. The checks report aggregate observations without changing historical data.
+
+## Phase 2 automatic ID generation
+
+On the initialized lab database, inspect the target, apply the migration, then inspect its configuration:
+
+```powershell
+docker exec -w /lab -i kloudkart psql -U postgres -d postgres -X -v ON_ERROR_STOP=1 -f checkout_prechecks.sql
+docker exec -w /lab -i kloudkart psql -U postgres -d postgres -X -v ON_ERROR_STOP=1 -f checkout.sql
+docker exec -w /lab -i kloudkart psql -U postgres -d postgres -X -v ON_ERROR_STOP=1 -f checkout_prechecks.sql
+```
+
+Run the complete migration. It handles missing identities, converts `BY DEFAULT` to `ALWAYS`, and preserves existing `ALWAYS` identities. It dynamically finds the sequences and advances them only if necessary. Existing table rows are unchanged. The migration briefly takes exclusive table and sequence locks and stops if a lock cannot be acquired within 10 seconds.
+
+The connection fingerprint can also be run in VS Code. Compare the cluster identifier and database name with Docker's output. A Unix-socket connection inside Docker can have a NULL server address while VS Code uses TCP; that alone does not mean they use different servers. Exact sequence-state values appear as notices in the client's Messages output.
+
+To verify fresh-load behavior without touching the current database, run from the project root with Python 3:
+
+```powershell
+python tests/verify_identity_migration.py
+```
+
+This creates a uniquely named temporary database inside `kloudkart`, loads the supplied datasets there, exercises the migration, and removes only that temporary database afterward. Server errors are withheld from test output to protect confidential source values. Archived SQL is reference material; use the root scripts for the active implementation.
 
 ## Future checkout verification
 

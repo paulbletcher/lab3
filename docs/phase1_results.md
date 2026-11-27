@@ -2,6 +2,8 @@
 
 Phase 1 data diagnosis is complete. All 21 integrity checks executed successfully. The [diagnosis](diagnosis.md) explains the findings, business implications, and risk ranking.
 
+These schema observations describe the Phase 1 baseline. See [Phase 2 automatic ID generation](phase2_identity.md) for the current identity configuration.
+
 ## Environment
 
 - PostgreSQL: `18.7 (Debian 18.7-1.pgdg13+5)`.
