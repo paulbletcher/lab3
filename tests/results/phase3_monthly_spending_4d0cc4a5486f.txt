@@ -1,0 +1,62 @@
+Connection: {"database": "postgres", "user": "postgres", "cluster_identifier": "7712053334814294059", "isolation": "repeatable read", "read_only": "on", "cutoff": "2026-11-27 00:00:00", "window_start": "2025-12-01 00:00:00"}
+Step 3.2/3.3 cutoff and eligibility definition consistency: PASS
+Distinct customers: expected=40420 actual=40420 PASS
+Reporting months: expected=12 actual=12 PASS
+Customer-month rows: expected=485040 actual=485040 PASS
+Minimum rows per customer: expected=12 actual=12 PASS
+Maximum rows per customer: expected=12 actual=12 PASS
+Duplicate customer-month keys: expected=0 actual=0 PASS
+First reporting month: expected=2025-12-01 actual=2025-12-01 PASS
+Last reporting month: expected=2026-11-01 actual=2026-11-01 PASS
+Month | Completed orders | Recorded spending | Purchasing customers | Missing amounts
+2025-12-01 | 3836 | 11773386.73 | 3645 | 0
+2026-01-01 | 5153 | 16816058.30 | 4842 | 0
+2026-02-01 | 5326 | 16086645.57 | 4974 | 0
+2026-03-01 | 7055 | 21837074.59 | 6467 | 0
+2026-04-01 | 9976 | 30080595.04 | 8839 | 0
+2026-05-01 | 11715 | 35751841.28 | 10188 | 0
+2026-06-01 | 15537 | 47361107.98 | 12971 | 0
+2026-07-01 | 18570 | 56633957.32 | 14899 | 0
+2026-08-01 | 25290 | 76665230.57 | 18851 | 0
+2026-09-01 | 4 | 6379.64 | 4 | 0
+2026-10-01 | 1 | 1768.01 | 1 | 0
+2026-11-01 | 0 | 0.00 | 0 | 0
+Lifetime reconciliation: {"lifetime_orders": 111195, "lifetime_spending": "339184984.53", "lifetime_missing": 0, "before_orders": 8732, "before_spending": "26170939.50", "before_missing": 0, "window_orders": 102463, "window_spending": "313014045.03", "window_missing": 0}
+Row count equals live customers times 12: PASS
+Every existing customer-month is present: PASS
+No extra customer-month keys: PASS
+Exactly 12 rows and months per customer: PASS
+No duplicate customer-month keys: PASS
+No nonexistent customers: PASS
+Exactly 12 derived months with correct endpoints: PASS
+No months outside derived window: PASS
+No-purchase cells have zero values: PASS
+Monthly order counts match independent window orders: PASS
+Monthly spending matches independent window orders: PASS
+Monthly missing amounts match independent window orders: PASS
+Every customer-month matches grouped reference: PASS
+Each eligible window order belongs to exactly one month: PASS
+Before plus within spending equals lifetime: PASS
+Before plus within orders equals lifetime: PASS
+Before plus within missing amounts equals lifetime: PASS
+Step 3.3 totals match independent lifetime orders: PASS
+Step 3.3 reconciles per customer with before plus monthly: PASS
+MONTH-SYN-01: PASS; Multiple normalized completed orders in one month
+MONTH-SYN-02: PASS; Different months and December-to-January boundary
+MONTH-SYN-03: PASS; Customer without orders has twelve zero cells
+MONTH-SYN-04: PASS; Missing months between purchases are zero-filled
+MONTH-SYN-05: PASS; All-NULL amounts retain positive order and missing counts
+MONTH-SYN-06: PASS; Mixed known and NULL amounts retain subtotal and missing count
+MONTH-SYN-07: PASS; Zero and negative monetary amounts remain eligible
+MONTH-SYN-08: PASS; Immediately before window contributes only to lifetime
+MONTH-SYN-09: PASS; Inclusive window-start order is counted
+MONTH-SYN-10: PASS; Immediately before cutoff is included
+MONTH-SYN-11: PASS; At/after cutoff, invalid statuses/dates and missing customers excluded
+MONTH-SYN-12: PASS; Only-ineligible-order customer receives twelve zero cells
+MONTH-SYN-13: PASS; Exactly one row for every synthetic customer-month
+MONTH-SYN-14: PASS; Window and lifetime order/spending/missing counts reconcile
+MONTH-SYN-15: PASS; Leap-year February and exclusive March-start cutoff
+MONTH-SYN-16: PASS; Month-start cutoff selects previous final month
+MONTH-SYN-17: PASS; January-start cutoff selects previous December and calendar year
+Overall monthly-spending validation: PASS
+Read-only transaction completed; VALUES fixtures created no records or database objects.

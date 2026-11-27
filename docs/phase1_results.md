@@ -2,7 +2,7 @@
 
 Phase 1 data diagnosis is complete. All 21 integrity checks executed successfully. The [diagnosis](diagnosis.md) explains the findings, business implications, and risk ranking.
 
-These schema observations describe the Phase 1 baseline. See [Phase 2 automatic ID generation](phase2_identity.md) for the current identity configuration.
+The schema observations, row counts and integrity results below describe the historical Phase 1 baseline. Phase 2 is now complete, and Phase 3 is in progress. See [identity-stage verification](phase2_identity.md), [completed checkout verification](phase2_test_results.md) and [Phase 3 reporting](phase3_reporting.md) for subsequent work. The original observations and values are preserved here.
 
 ## Environment
 
@@ -14,7 +14,7 @@ Verification uses aggregate queries and database metadata. Individual customer a
 
 ## Schema verification
 
-All **31 column definitions** across the six tables match `schema.sql`: names, order, types, nullability, defaults, and identity generation. The primary keys are:
+At Phase 1 verification, all **31 column definitions** across the six tables matched `schema.sql`: names, order, types, nullability, defaults, and identity generation. The primary keys were:
 
 | Table | Primary key | Constraint |
 |---|---|---|
@@ -118,8 +118,10 @@ Deleting orphaned order items would remove evidence of historical purchases. Ass
 
 For Kloud Kart, preserving this evidence supports reliable customer-spending analysis and an inventory trail that can be investigated. Reports will need explicit, documented handling of unresolved records, and any later correction must be supported by evidence.
 
-Preventing new faults and correcting historical faults are separate responsibilities. Future checkout validation, stock controls, and audit behavior can protect new transactions without assuming that existing records have been repaired.
+Preventing new faults and correcting historical faults are separate responsibilities. Phase 2 now validates and locks checkout requests and atomically records pending orders, stock deductions and sale movements through `place_order`. These controls protect that call path without implying that historical records have been repaired or arbitrary inventory updates are audited.
 
 ## Project status
 
-Phases 0 and 1 are complete. Phases 2 through 5 are not started. Checkout and the inventory audit mechanism are future work.
+Phases 0, 1 and 2 are complete. Phase 3 is in progress, currently limited to the reporting base and its aggregate reconciliation. Phases 4 and 5 have not started.
+
+Payment processing, reservation expiry, cancellation/stock restoration and permanent foreign-key enforcement remain unimplemented. These current-status statements do not replace the historical Phase 1 observations above.

@@ -1,0 +1,51 @@
+Connection: {"database": "postgres", "user": "postgres", "cluster_identifier": "7712053334814294059", "isolation": "repeatable read", "read_only": "on", "cutoff": "2026-11-27 00:00:00"}
+Prior cutoff, eligibility and customer-total CTE consistency: PASS
+Eligible order rows: expected=111195 actual=111195 PASS
+Distinct order IDs: expected=111195 actual=111195 PASS
+Purchasing customers: expected=37900 actual=37900 PASS
+Duplicate order IDs: expected=0 actual=0 PASS
+Missing order amounts: expected=0 actual=0 PASS
+Customers included in RANK: expected=40420 actual=40420 PASS
+ROWS/RANGE aggregate diagnostics: {"customers_with_timestamp_ties": 0, "customers_with_calendar_day_ties": 651, "customers_with_frame_differences": 0, "affected_order_rows": 0, "real_frame_difference_observed": false}
+All-customer spending tie groups: 1080
+Every eligible order appears exactly once: PASS
+No ineligible order or altered source value appears: PASS
+No nonexistent customer appears: PASS
+No missing date or order at/beyond cutoff appears: PASS
+First known spending and missing count are correct: PASS
+Deterministic chronological positions are correct: PASS
+Known running spending satisfies independent recurrence: PASS
+Running missing count satisfies independent recurrence: PASS
+Final spending matches Step 3.3 for every purchasing customer: PASS
+Final missing counts match Step 3.3: PASS
+Final order counts match Step 3.3: PASS
+Previous dates match preceding eligible orders: PASS
+Calendar-day gaps are correct: PASS
+First orders have NULL previous date and gap: PASS
+All-customer ranks match independent spending-bucket counts: PASS
+Order-level rank joins match actual customer rank CTE: PASS
+Equal spending totals preserve equal RANK values: PASS
+RANGE values match independently grouped timestamp peers: PASS
+No order maps to multiple customers or positions: PASS
+RUN-SYN-01: PASS; Multiple chronological orders retain separate running values
+RUN-SYN-02: PASS; Different customer partitions accumulate independently
+RUN-SYN-03: PASS; Timestamp ties use order ID despite shuffled input
+RUN-SYN-04: PASS; RANGE shares a cumulative value across exact timestamp peers
+RUN-SYN-05: PASS; Same calendar day with distinct timestamps is not one RANGE peer group
+RUN-SYN-06: PASS; Single-order customer has NULL first LAG and gap
+RUN-SYN-07: PASS; Same-day and same-timestamp gaps are zero
+RUN-SYN-08: PASS; Multi-day gap is a calendar-day difference
+RUN-SYN-09: PASS; Two minutes across midnight gives one calendar day
+RUN-SYN-10: PASS; All-NULL amounts have zero known sum and increasing missing count
+RUN-SYN-11: PASS; Mixed known and NULL amounts retain known subtotal and missing count
+RUN-SYN-12: PASS; Zero and negative amounts remain and may decrease the running sum
+RUN-SYN-13: PASS; RANK preserves spending ties and gaps
+RUN-SYN-14: PASS; Zero-order customers affect ranks but have no order-output rows
+RUN-SYN-15: PASS; Ineligible statuses, dates and customer references are excluded
+RUN-SYN-16: PASS; Just-before cutoff is included, exact/after cutoff excluded
+RUN-SYN-17: PASS; Lifetime history older than the monthly window is retained
+RUN-SYN-18: PASS; Full expected running/LAG/rank/RANGE rows match
+RUN-SYN-19: PASS; Synthetic ROWS/RANGE difference affects one customer and one row
+RUN-SYN-20: PASS; Final known spending/missing/order counts match Step 3.3
+Overall running-total validation: PASS
+Read-only transaction completed; VALUES fixtures created no records or database objects.

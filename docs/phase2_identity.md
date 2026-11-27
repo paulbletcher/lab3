@@ -2,15 +2,17 @@
 
 Verified on 2026-11-27 (UTC), using PostgreSQL 18.7 in Docker container `kloudkart`, database/user `postgres`.
 
-Automatic ID generation is complete. Checkout, input validation, stock-concurrency controls, and an audit mechanism are not implemented. The supplied `race_test.py` was not changed or executed.
+This document records the historical identity-migration stage. At that stage, automatic ID generation was complete; checkout, input validation, stock-concurrency controls and an audit mechanism were not implemented, and the supplied `race_test.py` had not been changed or executed.
 
-## Connection investigation and cause
+**Current project state:** Phase 2 is complete and Phase 3 is in progress. `place_order` now validates and locks requests, reserves stock and atomically creates a pending order, item and sale movement. The unchanged official race harness has since passed all four tests; see [Phase 2 test results](phase2_test_results.md). Step 3.2 reporting decisions and results are recorded in [Phase 3 reporting](phase3_reporting.md). Payment processing, reservation expiry, cancellation handling, permanent foreign keys and auditing of arbitrary inventory updates remain unimplemented.
+
+## Historical connection investigation and cause
 
 The active Docker database already had `ALWAYS` identities on all three target columns when inspected. Their sequences were at the correct initial values, with `is_called = false`.
 
-The active root `checkout.sql` unconditionally used `ADD GENERATED ALWAYS AS IDENTITY`. Adding identity to an existing identity column raises the reported error. Its unconditional `setval(..., calculated_start, false)` calls would also risk rewinding a used sequence if they were rerun independently. The archived migration uses `BY DEFAULT`; it is reference material rather than the active implementation.
+At the start of this investigation, the root `checkout.sql` unconditionally used `ADD GENERATED ALWAYS AS IDENTITY`. Adding identity to an existing identity column raises the reported error. Its unconditional `setval(..., calculated_start, false)` calls would also risk rewinding a used sequence if they were rerun independently. The archived migration uses `BY DEFAULT`; it is reference material rather than the active implementation. The corrected migration behavior is described below.
 
-The currently observed VS Code sessions for both `checkout.sql` and `checkout_prechecks.sql` appear in Docker's `pg_stat_activity`, connected to database `postgres` from `172.17.0.1`. Thus, those active sessions and Docker's terminal currently reach the same database. This is server-side evidence rather than an assumption based on both connections using port 5432.
+During identity-stage verification, the observed VS Code sessions for both `checkout.sql` and `checkout_prechecks.sql` appeared in Docker's `pg_stat_activity`, connected to database `postgres` from `172.17.0.1`. Those sessions and Docker's terminal reached the same database. This was server-side evidence rather than an assumption based on both connections using port 5432; it is not a fresh inspection of today's editor sessions.
 
 | Target | Cluster identifier | State |
 |---|---|---|
@@ -39,7 +41,7 @@ The migration supports the lab's standard integer sequences with increment 1 and
 
 `SET GENERATED` changes future insert behavior without rewriting historical row values. A forward `RESTART` is transactional, whereas `setval()` is not rolled back with the surrounding transaction. See the PostgreSQL 18 documentation for [identity alteration](https://www.postgresql.org/docs/18/sql-altertable.html) and [sequence alteration](https://www.postgresql.org/docs/18/sql-altersequence.html).
 
-## Current verified configuration
+## Verified configuration at the identity-migration stage
 
 | Table / column | Identity mode | Associated sequence | last_value | is_called | Next ID |
 |---|---|---|---:|---|---:|
@@ -60,7 +62,7 @@ These numbers are observed results, not constants in the migration. The order bo
 
 The revised migration committed successfully against the current database. It retained the existing identities and all three sequence states; none required advancement or replacement. No `nextval()` or test inserts were executed against the current database.
 
-Aggregate fingerprints and row counts for all six tables were identical before and after migration. There remain 692 orphaned order-item references, and no `place_order` function exists. Historical records were not altered.
+Aggregate fingerprints and row counts for all six tables were identical before and after migration. At that stage, 692 orphaned order-item references remained and no `place_order` function existed. Historical records were not altered. The function was implemented and verified later, as documented in [Phase 2 test results](phase2_test_results.md).
 
 ## Isolated verification
 
@@ -81,9 +83,9 @@ The following checks passed:
 | Historical test data | Counts and orphan count remain unchanged after rolled-back synthetic inserts |
 | Cleanup | Temporary verification database removed; no verification databases remain |
 
-## Limitations and next work
+## Identity-stage limitations
 
-- This establishes ID generation, not checkout correctness, overselling protection, input validation, or an inventory audit trail.
+- The identity-stage tests alone establish ID generation, not checkout correctness, overselling protection, input validation or an inventory audit trail. Subsequent tests cover the implemented checkout path in [Phase 2 test results](phase2_test_results.md).
 - Exclusive locks briefly block other table access. A lock timeout causes the transaction to fail safely; rerun the complete script after resolving contention.
 - Integers retain their existing range. Allocation fails at the sequence maximum rather than wrapping around.
 - Sequences can have gaps, including after rolled-back transactions; IDs are identifiers rather than consecutive business numbers.
