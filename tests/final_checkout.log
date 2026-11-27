@@ -1,7 +1,7 @@
 BEGIN
 DO
 ROLLBACK
-psql:tests/phase2/test_place_order.sql:124: NOTICE:  Successful purchase: order ID = 999950
+psql:tests/phase2/test_place_order.sql:124: NOTICE:  Successful purchase: order ID = 1000285
 psql:tests/phase2/test_place_order.sql:124: NOTICE:  Order, order item and inventory log verified.
 psql:tests/phase2/test_place_order.sql:124: NOTICE:  Insufficient-stock request refused correctly.
 psql:tests/phase2/test_place_order.sql:124: NOTICE:  All checkout tests passed.

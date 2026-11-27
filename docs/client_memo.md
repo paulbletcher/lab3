@@ -22,7 +22,7 @@ Fourteen products have negative stock. For 1,624 completed orders, recorded tota
 
 Reconcile the fourteen negative balances against physical stock. Give Finance and Ops ownership of the order review list and verify original charges before correcting amounts. Use the protected sales and stock-adjustment routes.
 
-Measure checkout on the live workload before the flash sale: latest simulated runs took 14.32, 10.08 and 17.49 seconds, exceeding the ten-second goal. Defer a bigger server decision: the measured reports already finish in seconds, and these tests have not reproduced the reported forty-minute delay.
+Measure checkout on the live workload before the flash sale: the selected version achieved 9.29, 7.98 and 7.54 seconds in three trials, but final confirmation took 19.62 seconds. The ten-second goal remains unreliable. Defer a bigger server decision: the measured reports already finish in seconds, and these tests have not reproduced the reported forty-minute delay.
 
 ## What I could not stand behind
 

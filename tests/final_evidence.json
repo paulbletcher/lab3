@@ -1,5 +1,5 @@
 {
-  "verified_at_utc": "2026-11-27T15:26:35.883778+00:00",
+  "verified_at_utc": "2026-11-27T15:51:28.206332+00:00",
   "database": "kloudkart_submission_20261127",
   "container": "kloudkart_rebuild",
   "environment": [
@@ -82,6 +82,8 @@
     "zero quantity",
     "negative quantity",
     "missing customer",
+    "bigint customer",
+    "bigint customer and product precedence",
     "missing product",
     "bigint product",
     "customer precedence",
@@ -91,6 +93,7 @@
     "null stock",
     "negative stock",
     "failed order INSERT restores stock and all write counts",
+    "failed final checkout audit INSERT restores stock, order and item",
     "zero-priced checkout succeeds atomically; caller rollback follows"
   ],
   "review_queue_groups": [
@@ -127,7 +130,7 @@
     "successes": 50,
     "refusals": 350,
     "errors": 0,
-    "flash_seconds": 14.32,
+    "flash_seconds": 19.62,
     "process_seconds": 23.337700700038113,
     "all_four_passed": true,
     "audit_test": {
@@ -141,13 +144,20 @@
       "refusals": 25
     },
     "flash_runs_seconds": [
-      14.32,
-      10.08,
-      17.49
+      9.29,
+      7.98,
+      7.54,
+      19.62
     ],
-    "flash_median_seconds": 14.32,
-    "flash_worst_seconds": 17.49,
-    "flash_target_all_runs_met": false
+    "flash_median_seconds": 8.635,
+    "flash_worst_seconds": 19.62,
+    "flash_target_all_runs_met": false,
+    "confirmation_logs": [
+      "flash_linux_locked_lookup_20261127T154657Z_1.log",
+      "flash_linux_locked_lookup_20261127T154657Z_2.log",
+      "flash_linux_locked_lookup_20261127T154657Z_3.log",
+      "flash_final_full.log"
+    ]
   },
   "performance": {
     "original_reference": {
@@ -208,8 +218,25 @@
     ]
   ],
   "all_checks_passed": true,
-  "all_checks_scope": "correctness, installation and preservation; latency targets are reported separately",
+  "all_checks_scope": "correctness and preservation; recorded flash observations determine latency separately",
   "performance_targets": {
     "flash_all_runs_within_ten_seconds": false
-  }
+  },
+  "report_measurements_retained_from": "2026-11-27T15:26:35.883778+00:00",
+  "race_client": {
+    "client": "linux-docker",
+    "image": "kloudkart-race-client:de03",
+    "network": "container bridge TCP; matching scram-sha-256 authentication",
+    "authentication_preflight": {
+      "wrong_password_rejected": true,
+      "correct_password_accepted": true,
+      "database": "kloudkart_submission_20261127",
+      "cluster": "7712767682595590187"
+    },
+    "harness_modified": false,
+    "connections": 400,
+    "connection_pool": false
+  },
+  "selected_checkout": "lock product with FOR NO KEY UPDATE, validate balance, then guarded deduction and atomic inserts",
+  "followup_source_matches_deployed": true
 }

@@ -56,7 +56,7 @@ Wait until `pg_isready` accepts connections. Keep the six supplied CSVs under `d
 
 ## Fresh load, installation and all checks
 
-The following command creates a uniquely named disposable database, loads the original schema/CSVs, installs the solution twice to verify safe reinstallation, runs all final SQL checks and the unchanged official harness, collects three flash-sale observations and times both reports:
+The following command creates a uniquely named disposable database, loads the original schema/CSVs, installs the solution twice to verify safe reinstallation, runs all final SQL checks and the unchanged official harness, collects three authenticated Linux flash-sale observations and times both reports. It now fails if any observation exceeds ten seconds (unless --allow-slow-race is explicitly selected):
 
 ```powershell
 $testDb = 'kloudkart_submission_' + (Get-Date -Format 'yyyyMMdd_HHmmss')
@@ -85,7 +85,7 @@ Final test output is overwritten by a repeat; copy evidence locally first if you
 
 ## Original official concurrency test
 
-The guarded runner executes `race_test.py` as a separate unchanged process. To invoke it directly against the verified disposable database, privately enter the password:
+The guarded runner builds the pinned client in `tests/phase3/Dockerfile.client` and executes `race_test.py` unchanged in a temporary Linux client. It still opens 400 independent TCP connections, using the container bridge address and SCRAM password authentication; a preflight verifies that a wrong password is rejected. The source is mounted read-only. No CSVs enter the client image and no production service is added. First setup needs an image/package download; subsequent builds use the cache. Native Windows execution remains available with `--race-client windows --allow-slow-race` as a diagnostic. The default verification command is the accepted timing route. To invoke the unchanged harness directly from native Windows for comparison, privately enter the password:
 
 ```powershell
 $credential = Get-Credential -UserName postgres -Message 'Password for kloudkart_rebuild'
@@ -137,3 +137,6 @@ The category rollup has cycle protection and no fixed depth cap; disconnected as
 The six original files are categories.csv, products.csv, customers.csv, orders.csv, order_items.csv and inventory_log.csv. They remain local and ignored. Do not commit credentials, environment files or customer-level records. No commit or push is part of this work.
 
 Local simulation does not establish production readiness or a consistent ten-second flash-sale bound. The measurement report retains over-target observations. Audit enforcement depends on restricted application connections; administrators retain bypass privileges. Historical inconsistencies need business evidence. A current stock-runway forecast was rejected because the inventory history has no recent sales and contains future records; the completed-order review queue is the delivered improvement.
+
+
+The final selected checkout is the lock-first version in `functions/phase3_place_order.sql`: lock the current product balance, validate availability, then deduct stock and insert the order, item and movement atomically. Its authenticated Linux trials were **9.29, 7.98 and 7.54 seconds**, each with 50 purchases, 350 refusals and zero errors. The final full-suite confirmation took 19.62 seconds, so the ten-second target remains inconsistent. All four correctness tests passed. Native Windows and production latency are not established by the faster trials. See `tests/phase3/logs/flash_final_selected.json` for final confirmation and `docs/phase3_optimization.md` for retained unfavorable comparisons.

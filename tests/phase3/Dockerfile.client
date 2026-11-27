@@ -1,0 +1,4 @@
+# Development/test client only; PostgreSQL and production objects are unchanged.
+FROM python:3.14-slim@sha256:22eafb370920ad8b429e0aec3fff433e0669968519f5d60469d83729c138b28b
+RUN python -m pip install --no-cache-dir psycopg2-binary==2.9.13
+WORKDIR /lab

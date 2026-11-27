@@ -3,8 +3,8 @@
   "page_format": "A4",
   "font_size_points": 9.5,
   "table_font_size_points": 8.3,
-  "words": 343,
+  "words": 353,
   "renderer": "reportlab; rendered PNG inspected separately",
   "visually_reviewed": true,
-  "memo_sha256": "b445d69202f40282a0bb63a4314c28b8708f2710390d98aea66b113678d280c3"
+  "memo_sha256": "29c0a519481f31c531a92e74e22a7421bf5ca1b12341e8c75fe38c4aedffe82d"
 }

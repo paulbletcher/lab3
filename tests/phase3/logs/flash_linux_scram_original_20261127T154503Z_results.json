@@ -1,0 +1,29 @@
+[
+  {
+    "run": 1,
+    "client": "linux",
+    "successes": 50,
+    "refusals": 350,
+    "errors": 0,
+    "seconds": 14.92,
+    "log": "flash_linux_scram_original_20261127T154503Z_1.log"
+  },
+  {
+    "run": 2,
+    "client": "linux",
+    "successes": 50,
+    "refusals": 350,
+    "errors": 0,
+    "seconds": 8.54,
+    "log": "flash_linux_scram_original_20261127T154503Z_2.log"
+  },
+  {
+    "run": 3,
+    "client": "linux",
+    "successes": 50,
+    "refusals": 350,
+    "errors": 0,
+    "seconds": 9.36,
+    "log": "flash_linux_scram_original_20261127T154503Z_3.log"
+  }
+]

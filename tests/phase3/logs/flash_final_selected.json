@@ -1,0 +1,23 @@
+{
+  "selected": "06_locked_stock_lookup",
+  "edge_checks": 19,
+  "authentication": {
+    "wrong_password_rejected": true,
+    "correct_password_accepted": true,
+    "database": "kloudkart_submission_20261127",
+    "cluster": "7712767682595590187"
+  },
+  "confirmation_seconds": [
+    9.29,
+    7.98,
+    7.54,
+    19.62
+  ],
+  "median_seconds": 8.635,
+  "worst_seconds": 19.62,
+  "all_under_ten": false,
+  "all_four_official_tests_passed": true,
+  "historical_fingerprints_unchanged": true,
+  "original_files_unchanged": true,
+  "git_head_unchanged": true
+}

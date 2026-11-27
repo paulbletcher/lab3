@@ -28,7 +28,7 @@
 
 The folder structure is preserved and extended: `data/`, `docs/`, `functions/`, `migrations/`, `reports/`, `tests/`, with the required new `decisions/` directory. Existing tests and logs remain in their original phase folders. The final runner, assertions, reference report and evidence are directly under `tests/`. The full tree and purpose of each directory appear in [README.md](../README.md).
 
-Modified files:
+Files modified for the initial submission:
 
 - `.gitignore`
 - `README.md`
@@ -92,7 +92,7 @@ Created files (evidence is aggregate or synthetic, never the CSV/customer record
 - Fresh disposable load: categories 94; products 4,023; customers 40,420; orders 159,384; order items 336,559; inventory log 282,352. Original scripts run through the verified `/lab` mount in `kloudkart_rebuild` against new database `kloudkart_submission_20261127`.
 - Complete installer runs top to bottom and runs a second time successfully. Sequence-consumption check proves reinstallation does not rewind an allocated ID. Required functions, views, ownership, security context, six original indexes and absence of custom triggers were checked.
 - Unchanged official harness: Test 1, 25 rounds, exactly 25 purchases and 25 refusals, stock zero each round; Test 2, each of three runs 50 purchases, 350 refusals, zero errors and no overselling; Test 3 clean refusal with stock still three; Test 4 exactly five purchases, seven refusals and five movement rows.
-- Additional checkout edge tests cover NULL/zero/negative inputs, absent customers/products, out-of-integer-domain IDs, price/stock exceptions, refusal without partial writes, a forced insert error and caller rollback. All 16 checks pass.
+- Additional checkout edge tests cover NULL/zero/negative inputs, absent customers/products, out-of-integer-domain IDs, price/stock exceptions, refusal without partial writes, a forced insert error and caller rollback. The follow-up adds bigint-customer and final audit-insert failure cases; all 19 checks pass.
 - Retained SQL tests: basic checkout, all 19 movement cases, forced audit-insert failure and all 12 application permission cases pass. Application permissions are exercised through SET LOCAL ROLE; production authentication is not configured.
 - Customer report: zero differences in both EXCEPT ALL directions; 40,420 customers, 2,520 with no qualifying orders, 111,195 orders and 339,184,984.53 spending; every customer has 12 months; full monthly sums and ending running totals reconcile. Synthetic tests verify normalized statuses, the date cutoff, monthly/lifetime distinction, deterministic order ties and ranking.
 - Recursive report: 91 reachable categories, actual depth four, two cycle members, one missing parent, three unreachable categories, 37 uncategorized products and 1,931 eligible low-stock products. Synthetic 35-level hierarchy, self/two-member cycles, orphan/uncategorized products, NULL/negative stock, threshold inclusivity and duplicate-path tests pass. Root reconciliation passes.
@@ -131,8 +131,19 @@ $testDb = 'kloudkart_submission_' + (Get-Date -Format 'yyyyMMdd_HHmmss')
 python tests/final_verification.py --fresh --database $testDb
 ```
 
-The functional runner returns failure on correctness/install/preservation errors. A successful return does **not** mean the flash-sale latency target was met: inspect `race.flash_target_all_runs_met` in `tests/final_evidence.json` and the measurement report. Subsequent runs overwrite final evidence; timings naturally vary. README contains container setup, installation-only, direct official-harness and all report commands, with private password entry.
+The updated functional runner returns failure on correctness/install/preservation errors and on any flash run over ten seconds, unless --allow-slow-race is explicitly selected. Inspect inspect `race.flash_target_all_runs_met` in `tests/final_evidence.json` and the measurement report. Subsequent runs overwrite final evidence; timings naturally vary. README contains container setup, installation-only, direct official-harness and all report commands, with private password entry.
 
 ## Git and submission state
 
 Branch remains `new`; seven existing files are modified and the new deliverables/evidence are untracked for review. The confidential `data/` directory remains ignored. No files were staged, committed or pushed. This is a complete set of deliverable artifacts with an explicit flash-sale performance gap, not a claim of full production readiness.
+
+
+## Selected follow-up and final submission state
+
+The selected lock-first implementation is installed from `functions/phase3_place_order.sql` and integrated through the existing run_all.sql path. The unchanged original harness passed all four correctness tests; all 19 checkout edge/rollback checks and all 12 role-permission tests passed. Historical fingerprints, original files/CSVs and the starting Git HEAD remain unchanged.
+
+Authenticated Linux timings were **9.29, 7.98, 7.54 and 19.62 seconds** (last observation: final full suite). Median **8.635 seconds**, worst **19.62 seconds**. **Consistent ten-second compliance remains unresolved.** All observations, including rejected candidate results, are retained. The user requested that comparison work stop and one version be finalized; the lock-first version was selected. No further performance work is pending in this handover.
+
+The default verification now uses `tests/race_client.py` and the pinned `tests/phase3/Dockerfile.client`, with 400 independent connections and matching SCRAM authentication. Native Windows timings are separate diagnostics. See `tests/phase3/logs/flash_final_selected.json` and `flash_final_full.log` for current confirmation. Report measurements were preserved from the prior validated run because reporting SQL was unchanged. All five deliverable artifacts remain present; the latency acceptance gap is disclosed in the memo and measurement report.
+
+Follow-up source changes: selected checkout SQL; tests/final_verification.py; tests/race_client.py; tests/phase3/Dockerfile.client; tuning/control scripts and trial evidence; ADR-001/002; README and final documentation. Starting HEAD was 56a328f (final submit); it was not changed by this follow-up. No commit or push was performed.

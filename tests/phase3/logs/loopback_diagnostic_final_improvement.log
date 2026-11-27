@@ -1,0 +1,53 @@
+CREATE FUNCTION
+BEGIN
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+INSERT 0 4
+INSERT 0 3
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ROLLBACK
+psql:tests/final_improvement.sql:8: NOTICE:  PASS: review queue reproduces three established completed-order counts
+psql:tests/final_improvement.sql:11: NOTICE:  PASS: review queue mismatch net and absolute amounts reconcile
+psql:tests/final_improvement.sql:13: NOTICE:  PASS: missing-customer recorded amounts reconcile
+psql:tests/final_improvement.sql:16: NOTICE:  PASS: incomplete amounts stay unknown
+psql:tests/final_improvement.sql:28: NOTICE:  PASS: overlapping missing-customer and incomplete-line flags, no invented line sum
+psql:tests/final_improvement.sql:30: NOTICE:  PASS: pending order excluded
+psql:tests/final_improvement.sql:33: NOTICE:  PASS: future completed order stays reviewable; signed difference is stored minus lines
+psql:tests/final_improvement.sql:36: NOTICE:  PASS: order with no lines is incomplete rather than zero-valued

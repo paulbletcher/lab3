@@ -25,11 +25,15 @@ All report times below are milliseconds. Flash-sale times are explicitly seconds
 | Final original spending reference | 2,611.769; 2,463.959; 2,398.090 ms | 2,463.959 ms | Insufficient n=3 | 2,611.769 ms | Local seconds scale |
 | Final permanently integrated spending | 1,334.088; 1,515.989; 1,708.638 ms | 1,515.989 ms | Insufficient n=3 | 1,708.638 ms | Yes, local |
 | Final recursive low stock | 17.522; 14.119; 14.156 ms | 14.156 ms | Insufficient n=3 | 17.522 ms | Yes, local |
-| Final flash sale, 400 buyers / 50 units | 14.32; 10.08; 17.49 s | 14.32 s | Insufficient n=3 | 17.49 s | **No: all three exceed 10 s** |
+| Previous native Windows flash sale, 400 buyers / 50 units | 14.32; 10.08; 17.49 s | 14.32 s | Insufficient n=3 | 17.49 s | **No: all three exceed 10 s** |
 
 Each final flash run had 50 purchases, 350 out-of-stock refusals, zero errors, final stock zero and one order per purchase. Test 1 passed all 25 rounds; Test 3 refused 10 units against 3 without a stock change; Test 4 had 5 purchases, 7 refusals and exactly 5 movements. These correctness results are separate from the failed latency target.
 
 The first final-verification attempt also passed all SQL and official tests, with flash time 11.64 s, spending median 1,497.109 ms and low-stock median 13.561 ms. Its final source comparison failed because container psql preserved Windows CRLF while Python normalized it; the comparison was corrected to normalize line endings, without changing checkout SQL. Initial raw evidence remains in `tests/final_initial_*`. No slow observation was discarded as a correctness failure.
+
+The selected follow-up uses a lock-first checkout and the unmodified harness in an authenticated Linux test client on the same hardware. Its three trials were **9.29, 7.98 and 7.54 seconds**; final full-suite confirmation was **19.62 seconds**. Four-observation median: **8.635 seconds**; worst: **19.62 seconds**; p95: insufficiently sampled. **The ten-second goal is still not consistently met.** All four correctness tests and all 19 checkout edge/rollback checks passed. SQL comparison and unfavorable results are retained in `docs/phase3_optimization.md` and `tests/phase3/logs/flash_final_selected.json`.
+
+Linux connections use the container bridge address with the same SCRAM password authentication; an intentionally invalid password was rejected. Initial trusted-loopback diagnostics are excluded from acceptance claims and retained separately. Connection-only controls took 18.30/18.52 seconds from native Windows and 4.49/4.30 seconds from the authenticated Linux route. This changes the client/runtime/network path; it is not a SQL-only causal speedup. No pooling, reduced buyer count, authentication change or relaxed durability was used. The report timings in this document are retained from the previous complete report verification because reporting SQL did not change in this follow-up.
 
 ## Before / after
 
@@ -50,3 +54,5 @@ The spending rewrite replaces 485,040 customer-month rows with a single twelve-k
 - The official harness creates 400 new connections. Connection startup, Python thread scheduling, host load, the shared 4-CPU/3.76-GiB engine, row-lock waits and commit work can all affect wall time. Earlier connection-only investigations suggest startup overhead matters, but these final runs do not isolate a cause. No new causal claim or resource change is made. Measure a realistic production workload before choosing another SQL change, pooling or hardware.
 - Production load, data growth, network and the alleged forty-minute report were not reproduced. A larger server purchase is not justified by these local report timings alone. Do not present them as a measured improvement from forty minutes or as production capacity proof.
 - Results move with CURRENT_DATE. The fixed 2026-11-27 report-count assertion is conditional on that date; general equality, coverage, monthly and running-total checks remain active on later dates. The all_checks_passed evidence field refers to correctness/installation/preservation; the flash latency target is recorded separately as false.
+
+The final verifier now defaults to the pinned Linux test client and also fails if any timed run exceeds ten seconds. `--race-client windows --allow-slow-race` is an explicitly diagnostic route. At the user's request the selected lock-first version was finalized and further comparisons stopped; the final latency failure is retained, not discarded.

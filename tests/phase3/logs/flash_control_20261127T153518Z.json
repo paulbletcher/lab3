@@ -1,0 +1,20 @@
+[
+  {
+    "total_seconds": 18.302414399920963,
+    "before_barrier_seconds": 12.43265390000306,
+    "after_barrier_seconds": 5.869760499917902,
+    "successes": 400,
+    "errors": 0,
+    "connection_median_ms": 4560.6609000242315,
+    "query_max_ms": 5861.821400001645
+  },
+  {
+    "total_seconds": 18.52280639996752,
+    "before_barrier_seconds": 14.846120700007305,
+    "after_barrier_seconds": 3.676685699960217,
+    "successes": 400,
+    "errors": 0,
+    "connection_median_ms": 6752.715650072787,
+    "query_max_ms": 3670.7922000205144
+  }
+]

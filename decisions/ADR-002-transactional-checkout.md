@@ -30,7 +30,7 @@ Keep checkout stock deduction and all three inserts inside the caller transactio
 
 - **How it would work:** Chain every write through RETURNING dependencies.
 - **Why it is attractive:** Could reduce statement setup overhead.
-- **Why rejected:** The retained Phase 3 experiment was slower at its median and required an extra out-of-range input repair; the simpler measured implementation remains.
+- **Why rejected:** Both the earlier experiment and the follow-up combined-write candidate were rejected. The latter measured 14.63, 18.47 and 13.44 seconds, all over target, despite passing all 19 edge/rollback checks. Separate inserts remain.
 
 ## Consequences
 
