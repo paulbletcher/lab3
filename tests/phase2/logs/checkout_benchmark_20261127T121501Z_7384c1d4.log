@@ -1,0 +1,222 @@
+{
+  "after_barrier_seconds": 9.778839899925515,
+  "all_checkout_transactions_idle_after_execute": true,
+  "all_refusals_out_of_stock": true,
+  "before_barrier_seconds": 11.330176000017673,
+  "buyers": 400,
+  "clock_calibration_after": {
+    "offset_high_s": 1794955783.7149503,
+    "offset_low_s": 1794955783.713682,
+    "rtt_ms": 1.268399995751679
+  },
+  "clock_calibration_before": {
+    "offset_high_s": 1794955783.7131577,
+    "offset_low_s": 1794955783.7119553,
+    "rtt_ms": 1.2024000752717257
+  },
+  "clock_offset_envelope_width_ms": 2.995014190673828,
+  "commit_measurement": "Not separately observable with the official implicit commit; see acknowledgement tails.",
+  "diagnostic_schema_removed": true,
+  "errors": 0,
+  "final_stock": 0,
+  "fixture_inventory_net_change": -50,
+  "fixture_inventory_rows": 50,
+  "fixture_order_items": 50,
+  "fixture_orders": 50,
+  "fixture_rows_removed": {
+    "inventory_log": 50,
+    "order_items": 50,
+    "orders": 50,
+    "products": 1
+  },
+  "historical_counts_after": {
+    "categories": 94,
+    "customers": 40420,
+    "inventory_log": 282352,
+    "order_items": 336559,
+    "orders": 159384,
+    "products": 4023
+  },
+  "historical_counts_before": {
+    "categories": 94,
+    "customers": 40420,
+    "inventory_log": 282352,
+    "order_items": 336559,
+    "orders": 159384,
+    "products": 4023
+  },
+  "historical_counts_restored": true,
+  "initial_stock": 50,
+  "max_connections": "500",
+  "other_client_connections_before": 2,
+  "postgres_version": "18.7 (Debian 18.7-1.pgdg13+5)",
+  "protected_source_files_unchanged": true,
+  "public_function_body_matches_inspected_source": true,
+  "public_objects_unchanged": true,
+  "refused_purchases": 350,
+  "remaining_fixtures": 0,
+  "run": "20261127T121501Z_7384c1d4",
+  "separate_commit_duration_ms": null,
+  "source_sha256_after": {
+    "functions\\phase2_place_order.sql": "b02727f62e1ab070eca772c51edbe85522621a81a4a7b32ddf9e442be00c6d7e",
+    "race_test.py": "5f12a6697400dee3876dfa33a03fbdcc1dc906f665f3c0a6aaeffe73cdb27d00"
+  },
+  "source_sha256_before": {
+    "functions\\phase2_place_order.sql": "b02727f62e1ab070eca772c51edbe85522621a81a4a7b32ddf9e442be00c6d7e",
+    "race_test.py": "5f12a6697400dee3876dfa33a03fbdcc1dc906f665f3c0a6aaeffe73cdb27d00"
+  },
+  "successful_purchases": 50,
+  "timings": {
+    "refused": {
+      "client_execute_fetch_ms": {
+        "avg_ms": 7628.343604858632,
+        "max_ms": 9763.909300090745,
+        "median_ms": 7667.546750046313,
+        "n": 350
+      },
+      "connection_ms": {
+        "avg_ms": 3193.991403428372,
+        "max_ms": 7008.904700051062,
+        "median_ms": 3468.412449990865,
+        "n": 350
+      },
+      "function_ms": {
+        "avg_ms": 6430.850557142857,
+        "max_ms": 9169.099,
+        "median_ms": 6530.596,
+        "n": 350
+      },
+      "inventory_log_insert_ms": {
+        "avg_ms": null,
+        "max_ms": null,
+        "median_ms": null,
+        "n": 0
+      },
+      "order_insert_ms": {
+        "avg_ms": null,
+        "max_ms": null,
+        "median_ms": null,
+        "n": 0
+      },
+      "order_item_insert_ms": {
+        "avg_ms": null,
+        "max_ms": null,
+        "median_ms": null,
+        "n": 0
+      },
+      "post_function_to_ack_estimated_ms": {
+        "avg_ms": 10.58295999254499,
+        "max_ms": 294.88325119018555,
+        "median_ms": 8.554697036743164,
+        "n": 350
+      },
+      "post_function_to_ack_high_ms": {
+        "avg_ms": 12.080467087881905,
+        "max_ms": 296.38075828552246,
+        "median_ms": 10.052204132080078,
+        "n": 350
+      },
+      "post_function_to_ack_low_ms": {
+        "avg_ms": 9.085452897208077,
+        "max_ms": 293.38574409484863,
+        "median_ms": 7.05718994140625,
+        "n": 350
+      },
+      "post_update_function_ms": {
+        "avg_ms": 2.4317685714285715,
+        "max_ms": 17.796,
+        "median_ms": 1.8545,
+        "n": 350
+      },
+      "stock_completed_to_ack_estimated_ms": {
+        "avg_ms": 13.014725276402064,
+        "max_ms": 296.03028297424316,
+        "median_ms": 11.115193367004395,
+        "n": 350
+      },
+      "stock_update_ms": {
+        "avg_ms": 4756.389551428571,
+        "max_ms": 9103.084,
+        "median_ms": 4737.1669999999995,
+        "n": 350
+      }
+    },
+    "successful": {
+      "client_execute_fetch_ms": {
+        "avg_ms": 4464.803342006635,
+        "max_ms": 5265.115099959075,
+        "median_ms": 4634.649100073148,
+        "n": 50
+      },
+      "connection_ms": {
+        "avg_ms": 3011.2065920000896,
+        "max_ms": 6567.271100007929,
+        "median_ms": 2308.606249978766,
+        "n": 50
+      },
+      "function_ms": {
+        "avg_ms": 3204.67628,
+        "max_ms": 4908.155,
+        "median_ms": 3350.8085,
+        "n": 50
+      },
+      "inventory_log_insert_ms": {
+        "avg_ms": 5.9546600000000005,
+        "max_ms": 85.355,
+        "median_ms": 1.6680000000000001,
+        "n": 50
+      },
+      "order_insert_ms": {
+        "avg_ms": 33.8571,
+        "max_ms": 1183.01,
+        "median_ms": 3.384,
+        "n": 50
+      },
+      "order_item_insert_ms": {
+        "avg_ms": 19.08238,
+        "max_ms": 791.3,
+        "median_ms": 0.7785,
+        "n": 50
+      },
+      "post_function_to_ack_estimated_ms": {
+        "avg_ms": 39.42689895629883,
+        "max_ms": 156.05926513671875,
+        "median_ms": 23.586750030517578,
+        "n": 50
+      },
+      "post_function_to_ack_high_ms": {
+        "avg_ms": 40.92440605163574,
+        "max_ms": 157.55677223205566,
+        "median_ms": 25.084257125854492,
+        "n": 50
+      },
+      "post_function_to_ack_low_ms": {
+        "avg_ms": 37.929391860961914,
+        "max_ms": 154.56175804138184,
+        "median_ms": 22.089242935180664,
+        "n": 50
+      },
+      "post_update_function_ms": {
+        "avg_ms": 69.63007999999999,
+        "max_ms": 2466.649,
+        "median_ms": 13.8395,
+        "n": 50
+      },
+      "stock_completed_to_ack_estimated_ms": {
+        "avg_ms": 109.05699253082275,
+        "max_ms": 2622.708320617676,
+        "median_ms": 37.249207496643066,
+        "n": 50
+      },
+      "stock_update_ms": {
+        "avg_ms": 1448.35734,
+        "max_ms": 3983.353,
+        "median_ms": 1395.925,
+        "n": 50
+      }
+    }
+  },
+  "wall_seconds": 21.109015899943188,
+  "worker_autocommit": true,
+  "workload_counts_match_expected": true
+}

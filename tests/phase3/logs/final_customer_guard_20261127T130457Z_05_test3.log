@@ -1,0 +1,10 @@
+race_test.py — Kloud Kart order placement under contention
+==================================================================
+  place_order found: place_order(p_customer_id bigint, p_product_id bigint, p_quantity integer)
+
+Test 3 — asking for more than exists
+        [  0] success=False order_id=None     6.5ms msg='Out of stock.' err=''
+  ok    refused cleanly, stock untouched
+
+==================================================================
+PASSED — exactly one buyer gets the last unit, every time.

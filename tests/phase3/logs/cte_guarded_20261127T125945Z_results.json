@@ -1,0 +1,416 @@
+[
+  {
+    "counts_and_orphans_restored": true,
+    "exit_code": 0,
+    "fixture_checks": [
+      {
+        "columns": [
+          "table_name",
+          "count"
+        ],
+        "rows": [
+          [
+            "categories",
+            94
+          ],
+          [
+            "customers",
+            40420
+          ],
+          [
+            "inventory_log",
+            282352
+          ],
+          [
+            "order_items",
+            336559
+          ],
+          [
+            "orders",
+            159384
+          ],
+          [
+            "products",
+            4023
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "remaining_fixtures"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "orphan_orders_customer",
+          "orphan_items_order",
+          "orphan_items_product",
+          "orphan_logs_product"
+        ],
+        "rows": [
+          [
+            210,
+            692,
+            0,
+            120
+          ]
+        ]
+      }
+    ],
+    "output_log": "tests/phase3/logs/cte_guarded_20261127T125945Z_01_test1.log",
+    "process_seconds": 5.735014199977741,
+    "test": 1
+  },
+  {
+    "counts_and_orphans_restored": true,
+    "errors": 0,
+    "exit_code": 0,
+    "fixture_checks": [
+      {
+        "columns": [
+          "table_name",
+          "count"
+        ],
+        "rows": [
+          [
+            "categories",
+            94
+          ],
+          [
+            "customers",
+            40420
+          ],
+          [
+            "inventory_log",
+            282352
+          ],
+          [
+            "order_items",
+            336559
+          ],
+          [
+            "orders",
+            159384
+          ],
+          [
+            "products",
+            4023
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "remaining_fixtures"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "orphan_orders_customer",
+          "orphan_items_order",
+          "orphan_items_product",
+          "orphan_logs_product"
+        ],
+        "rows": [
+          [
+            210,
+            692,
+            0,
+            120
+          ]
+        ]
+      }
+    ],
+    "official_wall_seconds": 13.87,
+    "output_log": "tests/phase3/logs/cte_guarded_20261127T125945Z_02_test2.log",
+    "process_seconds": 15.113774499972351,
+    "refused": 350,
+    "successful": 50,
+    "test": 2
+  },
+  {
+    "counts_and_orphans_restored": true,
+    "errors": 0,
+    "exit_code": 0,
+    "fixture_checks": [
+      {
+        "columns": [
+          "table_name",
+          "count"
+        ],
+        "rows": [
+          [
+            "categories",
+            94
+          ],
+          [
+            "customers",
+            40420
+          ],
+          [
+            "inventory_log",
+            282352
+          ],
+          [
+            "order_items",
+            336559
+          ],
+          [
+            "orders",
+            159384
+          ],
+          [
+            "products",
+            4023
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "remaining_fixtures"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "orphan_orders_customer",
+          "orphan_items_order",
+          "orphan_items_product",
+          "orphan_logs_product"
+        ],
+        "rows": [
+          [
+            210,
+            692,
+            0,
+            120
+          ]
+        ]
+      }
+    ],
+    "official_wall_seconds": 9.62,
+    "output_log": "tests/phase3/logs/cte_guarded_20261127T125945Z_03_test2.log",
+    "process_seconds": 10.625009500072338,
+    "refused": 350,
+    "successful": 50,
+    "test": 2
+  },
+  {
+    "counts_and_orphans_restored": true,
+    "errors": 0,
+    "exit_code": 0,
+    "fixture_checks": [
+      {
+        "columns": [
+          "table_name",
+          "count"
+        ],
+        "rows": [
+          [
+            "categories",
+            94
+          ],
+          [
+            "customers",
+            40420
+          ],
+          [
+            "inventory_log",
+            282352
+          ],
+          [
+            "order_items",
+            336559
+          ],
+          [
+            "orders",
+            159384
+          ],
+          [
+            "products",
+            4023
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "remaining_fixtures"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "orphan_orders_customer",
+          "orphan_items_order",
+          "orphan_items_product",
+          "orphan_logs_product"
+        ],
+        "rows": [
+          [
+            210,
+            692,
+            0,
+            120
+          ]
+        ]
+      }
+    ],
+    "official_wall_seconds": 7.86,
+    "output_log": "tests/phase3/logs/cte_guarded_20261127T125945Z_04_test2.log",
+    "process_seconds": 8.630200600018725,
+    "refused": 350,
+    "successful": 50,
+    "test": 2
+  },
+  {
+    "counts_and_orphans_restored": true,
+    "exit_code": 0,
+    "fixture_checks": [
+      {
+        "columns": [
+          "table_name",
+          "count"
+        ],
+        "rows": [
+          [
+            "categories",
+            94
+          ],
+          [
+            "customers",
+            40420
+          ],
+          [
+            "inventory_log",
+            282352
+          ],
+          [
+            "order_items",
+            336559
+          ],
+          [
+            "orders",
+            159384
+          ],
+          [
+            "products",
+            4023
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "remaining_fixtures"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "orphan_orders_customer",
+          "orphan_items_order",
+          "orphan_items_product",
+          "orphan_logs_product"
+        ],
+        "rows": [
+          [
+            210,
+            692,
+            0,
+            120
+          ]
+        ]
+      }
+    ],
+    "output_log": "tests/phase3/logs/cte_guarded_20261127T125945Z_05_test3.log",
+    "process_seconds": 0.669453899958171,
+    "test": 3
+  },
+  {
+    "counts_and_orphans_restored": true,
+    "exit_code": 0,
+    "fixture_checks": [
+      {
+        "columns": [
+          "table_name",
+          "count"
+        ],
+        "rows": [
+          [
+            "categories",
+            94
+          ],
+          [
+            "customers",
+            40420
+          ],
+          [
+            "inventory_log",
+            282352
+          ],
+          [
+            "order_items",
+            336559
+          ],
+          [
+            "orders",
+            159384
+          ],
+          [
+            "products",
+            4023
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "remaining_fixtures"
+        ],
+        "rows": [
+          [
+            0
+          ]
+        ]
+      },
+      {
+        "columns": [
+          "orphan_orders_customer",
+          "orphan_items_order",
+          "orphan_items_product",
+          "orphan_logs_product"
+        ],
+        "rows": [
+          [
+            210,
+            692,
+            0,
+            120
+          ]
+        ]
+      }
+    ],
+    "output_log": "tests/phase3/logs/cte_guarded_20261127T125945Z_06_test4.log",
+    "process_seconds": 0.972773400018923,
+    "test": 4
+  }
+]

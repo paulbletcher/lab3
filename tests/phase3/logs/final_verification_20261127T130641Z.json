@@ -1,0 +1,102 @@
+{
+  "baseline_files_changed": [
+    "README.md"
+  ],
+  "baseline_files_missing": [],
+  "counts_orphans_and_fixtures_equal": true,
+  "deployed_function_matches_final_sql": true,
+  "git_branch": "new",
+  "git_head_unchanged": true,
+  "historical_fingerprints": {
+    "categories": [
+      94,
+      "6c816196cdec2bde36633b0125358c9d"
+    ],
+    "customers": [
+      40420,
+      "03938d3f98302dbba1154204f16d4993"
+    ],
+    "inventory_log": [
+      282352,
+      "5e7f047014f68e5d5e5eb7c890980aae"
+    ],
+    "order_items": [
+      336559,
+      "50c5421d9e8748211f236376b698affd"
+    ],
+    "orders": [
+      159384,
+      "7a0c0a0a27f2762a44e7dabefecce1e3"
+    ],
+    "products": [
+      4023,
+      "44b1f90f80addeb3a587134191649e87"
+    ]
+  },
+  "historical_fingerprints_equal": true,
+  "indexes_unchanged": true,
+  "only_expected_file_changes": true,
+  "race_test_unchanged": true,
+  "safety": [
+    {
+      "columns": [
+        "table_name",
+        "count"
+      ],
+      "rows": [
+        [
+          "categories",
+          94
+        ],
+        [
+          "customers",
+          40420
+        ],
+        [
+          "inventory_log",
+          282352
+        ],
+        [
+          "order_items",
+          336559
+        ],
+        [
+          "orders",
+          159384
+        ],
+        [
+          "products",
+          4023
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "remaining_fixtures"
+      ],
+      "rows": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "columns": [
+        "orphan_orders_customer",
+        "orphan_items_order",
+        "orphan_items_product",
+        "orphan_logs_product"
+      ],
+      "rows": [
+        [
+          210,
+          692,
+          0,
+          120
+        ]
+      ]
+    }
+  ],
+  "settings_unchanged": true,
+  "triggers_unchanged": true
+}

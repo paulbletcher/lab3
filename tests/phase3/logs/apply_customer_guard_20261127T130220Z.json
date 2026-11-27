@@ -1,0 +1,5 @@
+{
+  "rollback_file": "tests\\phase3\\backups\\before_customer_guard_20261127T130220Z.sql",
+  "sha256": "0fb2d6c39bbac1844be6e132eab6ca52780ee1c233286f5e57669822fe694c16",
+  "sql_file": "tests\\phase3\\experiments\\04_customer_update_guard.sql"
+}

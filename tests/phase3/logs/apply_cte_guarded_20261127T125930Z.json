@@ -1,0 +1,5 @@
+{
+  "rollback_file": "tests\\phase3\\backups\\before_cte_guarded_20261127T125930Z.sql",
+  "sha256": "90375bb96789b9ae8ef4bf667e20b22d31e4e780ca97e9f3e9eab386cc8d6b4d",
+  "sql_file": "tests\\phase3\\experiments\\02b_checkout_write_cte_guarded.sql"
+}

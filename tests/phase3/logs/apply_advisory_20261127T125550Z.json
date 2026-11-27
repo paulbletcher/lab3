@@ -1,0 +1,5 @@
+{
+  "rollback_file": "tests\\phase3\\backups\\before_advisory_20261127T125550Z.sql",
+  "sha256": "c2b2a372b44f959ed354fa92055c475d1cc4cae1d776dedc8d601554d3fb2023",
+  "sql_file": "tests\\phase3\\experiments\\01_product_advisory_queue.sql"
+}
