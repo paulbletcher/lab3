@@ -1,7 +1,7 @@
 # Submission checklist and handover
 
-**Date:** 2026-11-27  
-**Branch:** new  
+**Date:** 2026-11-27
+**Branch:** new-gapfix
 **Outcome:** All five deliverable artifacts are implemented and documented. Correctness and preservation checks pass. The latest flash-sale latency target remains unmet; do not represent this submission as meeting every performance criterion.
 
 ## Deliverables
@@ -115,7 +115,7 @@ The initial final-suite source check failed only on CRLF/LF comparison after all
 From Windows PowerShell:
 
 ```powershell
-Set-Location 'C:\Users\User\OneDrive\Desktop\amal\lab3'
+Set-Location '<PROJECT_DIR>'
 python tests/final_verification.py
 if ($LASTEXITCODE -ne 0) { throw 'Functional verification failed' }
 python tests/check_submission.py
@@ -147,3 +147,5 @@ Authenticated Linux timings were **9.29, 7.98, 7.54 and 19.62 seconds** (last ob
 The default verification now uses `tests/race_client.py` and the pinned `tests/phase3/Dockerfile.client`, with 400 independent connections and matching SCRAM authentication. Native Windows timings are separate diagnostics. See `tests/phase3/logs/flash_final_selected.json` and `flash_final_full.log` for current confirmation. Report measurements were preserved from the prior validated run because reporting SQL was unchanged. All five deliverable artifacts remain present; the latency acceptance gap is disclosed in the memo and measurement report.
 
 Follow-up source changes: selected checkout SQL; tests/final_verification.py; tests/race_client.py; tests/phase3/Dockerfile.client; tuning/control scripts and trial evidence; ADR-001/002; README and final documentation. Starting HEAD was 56a328f (final submit); it was not changed by this follow-up. No commit or push was performed.
+
+Current three-minute pass: branch new-gapfix was created from new at the existing HEAD. No commit or push was performed by this pass; historical statements above describe earlier work. The repository already contains user-created commits. See gapfix_summary.md for the current verification limits.

@@ -34,7 +34,7 @@ lab3/
 Use Windows PowerShell from this project directory, Docker Desktop, Python 3 and `psycopg2-binary`:
 
 ```powershell
-Set-Location 'C:\Users\User\OneDrive\Desktop\amal\lab3'
+Set-Location '<PROJECT_DIR>'
 python -m pip install psycopg2-binary
 docker ps --format '{{.Names}} {{.Ports}}'
 docker inspect kloudkart_rebuild --format '{{json .Mounts}}'
@@ -140,3 +140,6 @@ Local simulation does not establish production readiness or a consistent ten-sec
 
 
 The final selected checkout is the lock-first version in `functions/phase3_place_order.sql`: lock the current product balance, validate availability, then deduct stock and insert the order, item and movement atomically. Its authenticated Linux trials were **9.29, 7.98 and 7.54 seconds**, each with 50 purchases, 350 refusals and zero errors. The final full-suite confirmation took 19.62 seconds, so the ten-second target remains inconsistent. All four correctness tests passed. Native Windows and production latency are not established by the faster trials. See `tests/phase3/logs/flash_final_selected.json` for final confirmation and `docs/phase3_optimization.md` for retained unfavorable comparisons.
+
+
+Official deliverables: [D1 findings](docs/data_findings.md), [D2 SQL](run_all.sql), [D3 decisions](decisions/), [D4 memo](docs/client_memo.md), [D5 improvement](docs/improvement.md). Historical test evidence is marked in [tests/README.md](tests/README.md). See [three-minute gap-fix summary](docs/gapfix_summary.md) for completed work and limits.

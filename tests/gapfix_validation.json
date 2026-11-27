@@ -1,0 +1,7 @@
+{
+  "fresh_load_passed": true,
+  "installation_passed_twice": true,
+  "stock_synthetic_test_passed": false,
+  "full_verifier_failed": "Expected branch new",
+  "new_race_run_claimed": false
+}

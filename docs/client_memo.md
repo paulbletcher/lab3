@@ -1,12 +1,12 @@
 # Memo to Nana
 
-**From:** Kloud Kart project implementer  
-**Date:** 2026-11-27  
+**From:** Kloud Kart project implementer
+**Date:** 2026-11-27
 **Subject:** Safer sales, clearer spending and stock visibility
 
 ## What I found
 
-Fourteen products have negative stock. For 1,624 completed orders, recorded totals differ from complete item amounts; 144 completed orders lack customer records. These counts overlap and do not establish losses. Historical records were preserved for investigation.
+For 144 products, stock balances differ from recorded net movements by 2,553 units in total when differences are counted without cancelling each other out. Missing opening counts prevent calling these proven errors. Fourteen products have negative stock. Completed-order amount and customer-link problems also remain. Historical records were preserved for investigation.
 
 ## What I built
 

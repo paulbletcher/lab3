@@ -79,7 +79,16 @@ Normalized completed recorded value is 339,609,366.03. Removing missing-customer
 - **What I did about it:** The queue returns NULL for incomplete calculated amounts and differences; checkout inserts validated quantities/prices.
 - **Residual risk:** Original invoices are needed; no replacement prices were invented. These amounts overlap other findings.
 
-### F-07: Inventory logs referencing missing products — Severity: Medium
+### F-07: Stock cannot be independently reconstructed from movements ? Severity: High
+
+- **What it is:** Recorded balances differ from summed movements for 144 products; this is a reconciliation uncertainty, not 144 proven errors.
+- **How I detected it:** New Check 22 and report_stock_vs_log_reconciliation compare balances with signed net movements. Future means a movement calendar date after CURRENT_DATE.
+- **Scale:** 144 of 4,023 products; net difference -2,375 units; absolute difference 2,553 units. All products have logs. Excluding future movements resolves zero existing differences; 33 products have future net movements. Separately, 120 orphan movements net to -120 units and cannot explain balances for existing product IDs.
+- **Effect on the client's number:** Current availability cannot be certified against this ledger without opening stock and evidence of complete movement capture; these units are not established losses.
+- **What I did about it:** Added a reusable read-only view, aggregate check and saved product-ID-only top twenty in tests/gapfix_stock_reconciliation.json. No historical balance was corrected.
+- **Residual risk:** Implied opening stock equals current stock minus net movements; adding it back reconstructs stock by definition, not independent evidence. High priority is justified by fulfilment decisions, below confirmed critical balance/amount faults. Opening counts and physical stock are missing.
+
+### F-08: Inventory logs referencing missing products — Severity: Medium
 
 - **What it is:** Recorded movements cannot be linked to the catalog.
 - **How I detected it:** Check 4 LEFT JOINs inventory_log to products.
@@ -88,7 +97,7 @@ Normalized completed recorded value is 339,609,366.03. Removing missing-customer
 - **What I did about it:** Preserved records; approved inventory operations require an existing product and write one transactional movement.
 - **Residual risk:** Product retirement/deletion policy is unverified; administrators can still delete catalog records.
 
-### F-08: Circular category relationships — Severity: Medium
+### F-09: Circular category relationships — Severity: Medium
 
 - **What it is:** Two category parent links form a loop.
 - **How I detected it:** Check 7 follows parent paths and detects repeated IDs; report_category_cycles also searches disconnected components.
@@ -97,7 +106,7 @@ Normalized completed recorded value is 339,609,366.03. Removing missing-customer
 - **What I did about it:** Retained category links, added cycle-safe reports and explicit unreachable exceptions; removed the original fixed depth cutoff.
 - **Residual risk:** Intended hierarchy positions remain unknown; reporting does not prevent future catalog cycles.
 
-### F-09: Broken category parent reference — Severity: Medium
+### F-10: Broken category parent reference — Severity: Medium
 
 - **What it is:** A category refers to a parent that is absent.
 - **How I detected it:** Check 6 joins categories to their parents and tests missing non-NULL references.

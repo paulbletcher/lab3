@@ -12,5 +12,6 @@
 \ir reports/phase4_customer_spending.sql
 \ir reports/phase5_low_stock.sql
 \ir reports/order_review_queue.sql
+\ir reports/stock_vs_log_reconciliation.sql
 \ir tests/final_assertions.sql
 \echo 'Solution installed; all installation assertions passed.'

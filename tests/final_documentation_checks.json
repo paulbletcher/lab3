@@ -12,7 +12,7 @@
     "decisions/ADR-006-report-performance-optimization.md"
   ],
   "exactly_six_adrs": true,
-  "memo_words": 353,
+  "memo_words": 367,
   "all_local_document_links_resolve": true,
   "original_sources_and_csvs_unchanged": true,
   "git_diff_check_passed": true,

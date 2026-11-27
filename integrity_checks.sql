@@ -280,3 +280,10 @@ SELECT COUNT(*) AS stock_movements_without_timestamp
 FROM inventory_log
 WHERE change_qty <> 0
     AND created_at IS NULL;
+-- Check 22: Recorded stock versus net movements (opening balances are unknown).
+-- A difference is an implied opening balance, not proof of a stock error.
+WITH net AS (SELECT product_id,SUM(change_qty::bigint) AS units FROM inventory_log GROUP BY product_id)
+SELECT COUNT(*) FILTER (WHERE p.stock_quantity::bigint<>COALESCE(n.units,0)) AS differing_products,
+       SUM(p.stock_quantity::bigint-COALESCE(n.units,0)) AS net_difference_units,
+       SUM(ABS(p.stock_quantity::bigint-COALESCE(n.units,0))) AS absolute_difference_units
+FROM products p LEFT JOIN net n USING(product_id);

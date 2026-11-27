@@ -8,6 +8,8 @@
 
 Sales, restocks, inspected returns, damage, corrections and stock takes need an explainable audit trail. Direct stock writes could bypass logging. The original schema has no movement trigger; a trigger that merely logs stock changes cannot stop two buyers using a stale balance.
 
+Check 22 now finds 144 product balances different from net movements (2,553 absolute units). Unknown opening balances prevent classifying those differences as proven errors; the audit trail alone does not certify physical stock. Evidence: tests/gapfix_stock_reconciliation.json.
+
 ## Decision
 
 Keep sale logging inside `place_order` and use `record_inventory_movement` for other supported movements, updating stock and inserting the log atomically. Restrict the application role to these SECURITY DEFINER functions with a limited owner and safe search path; do not add a duplicate logging trigger.
