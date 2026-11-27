@@ -5,6 +5,16 @@
 SELECT 'lab_catalog_price_' || gen_random_uuid()::text AS fixture_marker \gset
 
 BEGIN;
+SET LOCAL statement_timeout = '60s';
+SET LOCAL lock_timeout = '10s';
+SHOW transaction_isolation;
+DO $$
+BEGIN
+    IF current_setting('transaction_isolation') <> 'read committed' THEN
+        RAISE EXCEPTION 'Price tests require the default READ COMMITTED isolation';
+    END IF;
+END;
+$$;
 
 CREATE TEMP TABLE catalog_price_run ON COMMIT DROP AS
 SELECT :'fixture_marker'::text AS marker,

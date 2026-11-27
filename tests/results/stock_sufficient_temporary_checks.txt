@@ -1,0 +1,34 @@
+﻿BEGIN
+SET
+SET
+ transaction_isolation 
+-----------------------
+ read committed
+(1 row)
+
+SELECT 1
+CREATE TABLE
+INSERT 0 2
+DO
+CREATE VIEW
+SELECT 4
+SELECT 2
+   test_id   |   scenario   |     expected_message     | response_rows | success | order_id |      actual_message      | test_result 
+-------------+--------------+--------------------------+---------------+---------+----------+--------------------------+-------------
+ TEMP-EXACT  | Exact stock  | Checkout not implemented |             1 | f       |          | Checkout not implemented | PASS
+ TEMP-EXCESS | Excess stock | Checkout not implemented |             1 | f       |          | Checkout not implemented | PASS
+(2 rows)
+
+SELECT 4
+  table_name   | unchanged 
+---------------+-----------
+ inventory_log | PASS
+ order_items   | PASS
+ orders        | PASS
+ products      | PASS
+(4 rows)
+
+DO
+ROLLBACK
+Remaining synthetic stock fixtures: 0
+Fixture cleanup: PASS

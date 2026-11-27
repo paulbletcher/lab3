@@ -3,6 +3,16 @@
 
 \set ON_ERROR_STOP on
 BEGIN;
+SET LOCAL statement_timeout = '60s';
+SET LOCAL lock_timeout = '10s';
+SHOW transaction_isolation;
+DO $$
+BEGIN
+    IF current_setting('transaction_isolation') <> 'read committed' THEN
+        RAISE EXCEPTION 'Validation tests require the default READ COMMITTED isolation';
+    END IF;
+END;
+$$;
 
 CREATE TEMP TABLE checkout_validation_results ON COMMIT DROP AS
 WITH test_cases AS (

@@ -1,5 +1,5 @@
 -- Phase 2: Safe order placement.
--- Validate the basic checkout parameters.
+-- Reserve stock and record a pending order, item and sale movement atomically.
 
 CREATE OR REPLACE FUNCTION place_order(
     p_customer_id bigint,
@@ -15,6 +15,8 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     v_price products.price%TYPE;
+    v_stock_quantity products.stock_quantity%TYPE;
+    v_order_id orders.order_id%TYPE;
 BEGIN
 
     -- Reject requests with missing parameters.
@@ -37,12 +39,13 @@ BEGIN
         RETURN;
     END IF;
 
-    -- Reject requests from nonexistent customers.
-    IF NOT EXISTS (
-        SELECT 1
-        FROM customers AS c
-        WHERE c.customer_id = p_customer_id
-    ) THEN
+    -- Protect the customer key before taking the product lock.
+    PERFORM 1
+    FROM customers AS c
+    WHERE c.customer_id = p_customer_id
+    FOR KEY SHARE;
+
+    IF NOT FOUND THEN
 
         RETURN QUERY
         SELECT false, NULL::bigint, 'Customer not found'::text;
@@ -50,10 +53,12 @@ BEGIN
         RETURN;
     END IF;
 
-    -- Retrieve the catalog price and distinguish absent products from NULL prices.
-    SELECT p.price INTO v_price
+    -- Lock the product and retrieve the current catalog price and stock together.
+    SELECT p.price, p.stock_quantity
+    INTO v_price, v_stock_quantity
     FROM products AS p
-    WHERE p.product_id = p_product_id;
+    WHERE p.product_id = p_product_id
+    FOR UPDATE;
 
     IF NOT FOUND THEN
 
@@ -72,9 +77,53 @@ BEGIN
         RETURN;
     END IF;
 
-    -- Temporary response until the remaining checkout logic is implemented.
+    -- Unknown or corrupt stock cannot be used to approve a purchase.
+    IF v_stock_quantity IS NULL THEN
+        RETURN QUERY
+        SELECT false, NULL::bigint, 'Stock quantity unavailable'::text;
+        RETURN;
+    END IF;
+
+    IF v_stock_quantity < 0 THEN
+        RETURN QUERY
+        SELECT false, NULL::bigint, 'Invalid stock quantity'::text;
+        RETURN;
+    END IF;
+
+    IF v_stock_quantity < p_quantity THEN
+        RETURN QUERY
+        SELECT false, NULL::bigint, 'Product out of stock'::text;
+        RETURN;
+    END IF;
+
+    -- The row is already locked; keep a defensive availability predicate.
+    UPDATE products AS p
+    SET stock_quantity = p.stock_quantity - p_quantity
+    WHERE p.product_id = p_product_id
+      AND p.stock_quantity >= p_quantity
+    RETURNING p.stock_quantity INTO v_stock_quantity;
+
+    IF NOT FOUND THEN
+        RETURN QUERY
+        SELECT false, NULL::bigint, 'Product out of stock'::text;
+        RETURN;
+    END IF;
+
+    -- Identities allocate IDs safely; payment is not confirmed by this function.
+    INSERT INTO orders AS o (customer_id, order_date, status, total_amount)
+    VALUES (p_customer_id, CURRENT_TIMESTAMP, 'pending', v_price * p_quantity)
+    RETURNING o.order_id INTO v_order_id;
+
+    INSERT INTO order_items (order_id, product_id, quantity, unit_price)
+    VALUES (v_order_id, p_product_id, p_quantity, v_price);
+
+    INSERT INTO inventory_log (product_id, change_qty, reason, created_at, note)
+    VALUES (p_product_id, -p_quantity, 'sale', CURRENT_TIMESTAMP,
+            'Order ' || v_order_id::text);
+
+    -- Errors propagate so the caller's transaction rolls back all four writes.
     RETURN QUERY
-    SELECT false, NULL::bigint, 'Checkout not implemented'::text;
+    SELECT true, v_order_id::bigint, 'Order placed successfully'::text;
 
 END;
 $$;

@@ -1,0 +1,6 @@
+﻿Stock fixtures remaining (fresh connection): 0
+Price fixtures remaining (fresh connection): 0
+Locking verification databases remaining (fresh connection): 0
+Independent fixture/database cleanup: PASS
+All six active tables: pre/post row counts and ordered full-row MD5 fingerprints unchanged; PASS.
+All prior evidence and race_test.py: SHA-256 unchanged; PASS.
