@@ -1,0 +1,15 @@
+﻿BEGIN
+SELECT 1
+CREATE TABLE
+INSERT 0 1
+DO
+SELECT 1
+   test_id   |        scenario        |     expected_message     | response_rows | success | order_id |      actual_message      | test_result 
+-------------+------------------------+--------------------------+---------------+---------+----------+--------------------------+-------------
+ SMOKE-VALID | Positive catalog price | Checkout not implemented |             1 | f       |          | Checkout not implemented | PASS
+(1 row)
+
+DO
+ROLLBACK
+Remaining synthetic fixtures: 0
+Fixture cleanup: PASS

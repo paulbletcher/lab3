@@ -1,0 +1,17 @@
+﻿BEGIN
+SELECT 1
+CREATE TABLE
+INSERT 0 3
+DO
+SELECT 3
+ test_id |        scenario        |   expected_message    | response_rows | success | order_id |    actual_message     | test_result 
+---------+------------------------+-----------------------+---------------+---------+----------+-----------------------+-------------
+ VAL-08  | NULL catalog price     | Invalid product price |             1 | f       |          | Invalid product price | PASS
+ VAL-09  | Zero catalog price     | Invalid product price |             1 | f       |          | Invalid product price | PASS
+ VAL-10  | Negative catalog price | Invalid product price |             1 | f       |          | Invalid product price | PASS
+(3 rows)
+
+DO
+ROLLBACK
+Remaining synthetic fixtures: 0
+Fixture cleanup: PASS

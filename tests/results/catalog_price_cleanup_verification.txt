@@ -1,0 +1,2 @@
+﻿Remaining catalog price fixtures (fresh connection): 0
+Fixture cleanup: PASS
