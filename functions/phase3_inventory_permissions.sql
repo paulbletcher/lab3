@@ -8,21 +8,24 @@ BEGIN;
 -- 1. Create dedicated roles.
 -- Neither role can log in directly.
 
-CREATE ROLE kloudkart_function_owner
-    NOLOGIN
-    NOSUPERUSER
-    NOCREATEDB
-    NOCREATEROLE
-    NOREPLICATION
-    NOBYPASSRLS;
-
-CREATE ROLE kloudkart_app
-    NOLOGIN
-    NOSUPERUSER
-    NOCREATEDB
-    NOCREATEROLE
-    NOREPLICATION
-    NOBYPASSRLS;
+DO $roles$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'kloudkart_function_owner') THEN
+        CREATE ROLE kloudkart_function_owner NOLOGIN NOSUPERUSER NOCREATEDB
+            NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+    END IF;
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'kloudkart_app') THEN
+        CREATE ROLE kloudkart_app NOLOGIN NOSUPERUSER NOCREATEDB
+            NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+    END IF;
+    IF EXISTS (SELECT FROM pg_roles
+               WHERE rolname IN ('kloudkart_function_owner', 'kloudkart_app')
+                 AND (rolcanlogin OR rolsuper OR rolcreatedb OR rolcreaterole
+                      OR rolreplication OR rolbypassrls)) THEN
+        RAISE EXCEPTION 'Existing application roles have unsafe attributes';
+    END IF;
+END;
+$roles$;
 
 
 -- 2. Allow access to objects within the public schema.

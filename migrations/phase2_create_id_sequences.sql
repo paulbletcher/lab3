@@ -38,7 +38,8 @@ ALTER SEQUENCE public.inventory_log_log_id_seq
     OWNED BY public.inventory_log.log_id;
 
 
--- 4. Synchronize sequences with existing IDs.
+-- 4. Synchronize sequences with existing IDs without moving used sequences backwards.
+-- Install during a maintenance window, with application writers stopped.
 -- Orders must also account for orphaned order references in order_items.
 
 WITH existing_ids AS (
@@ -49,8 +50,8 @@ WITH existing_ids AS (
 )
 SELECT setval(
     'public.orders_order_id_seq'::regclass,
-    GREATEST(highest_used_id, 1),
-    highest_used_id >= 1
+    GREATEST(highest_used_id, (SELECT last_value FROM public.orders_order_id_seq), 1),
+    highest_used_id >= 1 OR (SELECT is_called FROM public.orders_order_id_seq)
 )
 FROM existing_ids;
 
@@ -61,8 +62,8 @@ WITH existing_ids AS (
 )
 SELECT setval(
     'public.order_items_order_item_id_seq'::regclass,
-    GREATEST(highest_used_id, 1),
-    highest_used_id >= 1
+    GREATEST(highest_used_id, (SELECT last_value FROM public.order_items_order_item_id_seq), 1),
+    highest_used_id >= 1 OR (SELECT is_called FROM public.order_items_order_item_id_seq)
 )
 FROM existing_ids;
 
@@ -73,8 +74,8 @@ WITH existing_ids AS (
 )
 SELECT setval(
     'public.inventory_log_log_id_seq'::regclass,
-    GREATEST(highest_used_id, 1),
-    highest_used_id >= 1
+    GREATEST(highest_used_id, (SELECT last_value FROM public.inventory_log_log_id_seq), 1),
+    highest_used_id >= 1 OR (SELECT is_called FROM public.inventory_log_log_id_seq)
 )
 FROM existing_ids;
 

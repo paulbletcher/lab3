@@ -1,0 +1,291 @@
+Pager usage is off.
+        server_version         
+-------------------------------
+ 18.7 (Debian 18.7-1.pgdg13+5)
+(1 row)
+
+ max_connections 
+-----------------
+ 500
+(1 row)
+
+  table_name   | row_count 
+---------------+-----------
+ categories    |        94
+ products      |      4023
+ customers     |     40420
+ orders        |    159384
+ inventory_log |    282352
+ order_items   |    336559
+(6 rows)
+
+       routine_name        | routine_type 
+---------------------------+--------------
+ place_order               | FUNCTION
+ record_inventory_movement | FUNCTION
+(2 rows)
+
+ event_object_table | trigger_name | event_manipulation 
+--------------------+--------------+--------------------
+(0 rows)
+
+              table_name              
+--------------------------------------
+ report_category_cycles
+ report_low_stock_by_category
+ report_eligible_completed_orders
+ report_customer_order_running_totals
+ report_customer_spending
+ report_category_exceptions
+ report_order_review_queue
+ report_category_hierarchy
+(8 rows)
+
+         sequence_name         
+-------------------------------
+ orders_order_id_seq
+ order_items_order_item_id_seq
+ inventory_log_log_id_seq
+(3 rows)
+
+   tablename   |     indexname      
+---------------+--------------------
+ categories    | categories_pkey
+ customers     | customers_pkey
+ inventory_log | inventory_log_pkey
+ order_items   | order_items_pkey
+ orders        | orders_pkey
+ products      | products_pkey
+(6 rows)
+
+ orders_with_orphaned_customer_id | orders_with_null_customer_id 
+----------------------------------+------------------------------
+                              210 |                            0
+(1 row)
+
+ items_with_orphaned_order_id | items_with_null_order_id 
+------------------------------+--------------------------
+                          692 |                        0
+(1 row)
+
+ items_with_orphaned_product_id | items_with_null_product_id 
+--------------------------------+----------------------------
+                              0 |                          0
+(1 row)
+
+ logs_with_orphaned_product_id | logs_with_null_product_id 
+-------------------------------+---------------------------
+                           120 |                         0
+(1 row)
+
+ products_with_orphaned_category_id | products_with_null_category_id 
+------------------------------------+--------------------------------
+                                  0 |                             37
+(1 row)
+
+ categories_with_missing_parent | top_level_categories 
+--------------------------------+----------------------
+                              1 |                    7
+(1 row)
+
+ categories_in_loops | categories_leading_into_loops 
+---------------------+-------------------------------
+                   2 |                             0
+(1 row)
+
+ products_with_negative_stock | products_with_null_stock 
+------------------------------+--------------------------
+                           14 |                        0
+(1 row)
+
+ items_with_negative_quantity | items_with_zero_quantity | items_with_null_quantity 
+------------------------------+--------------------------+--------------------------
+                            0 |                        0 |                        0
+(1 row)
+
+ items_with_negative_unit_price | items_with_zero_unit_price | items_with_null_unit_price 
+--------------------------------+----------------------------+----------------------------
+                              0 |                        152 |                        148
+(1 row)
+
+ orders_without_items | orders_with_incomplete_lines | orders_with_null_total | orders_with_total_mismatch 
+----------------------+------------------------------+------------------------+----------------------------
+                    0 |                          147 |                      0 |                       2279
+(1 row)
+
+ recorded_status | order_count 
+-----------------+-------------
+ ' completed'    |       22395
+ 'COMPLETED'     |       22392
+ 'complete'      |       22285
+ 'Completed'     |       22188
+ 'completed'     |       22091
+ 'Pending'       |        8081
+ 'pending'       |        7928
+ 'shipped'       |        6516
+ 'Shipped'       |        6332
+ 'Refunded'      |        3262
+ 'cancelled'     |        3238
+ 'refunded'      |        3217
+ 'canceled'      |        3209
+ 'Cancelled'     |        3131
+ 'CANCELLED'     |        3119
+(15 rows)
+
+ orders_with_null_date | earliest_order_date | latest_order_date 
+-----------------------+---------------------+-------------------
+                     0 | 2025-08-02          | 2027-08-20
+(1 row)
+
+ logs_with_null_change_qty | logs_with_zero_change_qty 
+---------------------------+---------------------------
+                         0 |                        90
+(1 row)
+
+ recorded_reason | stock_decreases | zero_changes | stock_increases | log_count 
+-----------------+-----------------+--------------+-----------------+-----------
+ 'sale'          |          262088 |            0 |               0 |    262088
+ 'restock'       |               0 |            0 |           18857 |     18857
+ 'return'        |               0 |            0 |             564 |       564
+ 'correction'    |             290 |            0 |             195 |       485
+ 'damage'        |             268 |            0 |               0 |       268
+ 'stock_take'    |               0 |           90 |               0 |        90
+(6 rows)
+
+ products_with_negative_price | products_with_zero_price | products_with_null_price 
+------------------------------+--------------------------+--------------------------
+                            0 |                        0 |                        0
+(1 row)
+
+ duplicate_email_groups | customer_rows_in_duplicate_email_groups 
+------------------------+-----------------------------------------
+                    533 |                                    1068
+(1 row)
+
+ completed_orders_with_missing_customers | stored_total_for_those_orders 
+-----------------------------------------+-------------------------------
+                                     144 |                     388780.89
+(1 row)
+
+ completed_orders_with_total_mismatch | net_difference | total_absolute_difference 
+--------------------------------------+----------------+---------------------------
+                                 1624 |    -1266190.96 |                2074053.86
+(1 row)
+
+ completed_orders_with_incomplete_lines | stored_total_for_those_orders 
+----------------------------------------+-------------------------------
+                                     95 |                     455904.42
+(1 row)
+
+ stock_movements_without_timestamp 
+-----------------------------------
+                                 0
+(1 row)
+
+BEGIN
+CREATE SEQUENCE
+CREATE SEQUENCE
+CREATE SEQUENCE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER SEQUENCE
+ALTER SEQUENCE
+ALTER SEQUENCE
+ setval 
+--------
+ 999947
+(1 row)
+
+ setval  
+---------
+ 1236642
+(1 row)
+
+ setval 
+--------
+ 982581
+(1 row)
+
+  table_name   |            sequence_name             | last_value | is_called 
+---------------+--------------------------------------+------------+-----------
+ orders        | public.orders_order_id_seq           |     999947 | t
+ order_items   | public.order_items_order_item_id_seq |    1236642 | t
+ inventory_log | public.inventory_log_log_id_seq      |     982581 | t
+(3 rows)
+
+COMMIT
+CREATE FUNCTION
+BEGIN
+CREATE FUNCTION
+REVOKE
+COMMIT
+BEGIN
+DO
+REVOKE
+GRANT
+REVOKE
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+REVOKE
+GRANT
+ALTER FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+ALTER FUNCTION
+REVOKE
+REVOKE
+GRANT
+GRANT
+COMMIT
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE FUNCTION
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+Solution installed; all installation assertions passed.
+psql:migrations/phase2_create_id_sequences.sql:9: NOTICE:  relation "orders_order_id_seq" already exists, skipping
+psql:migrations/phase2_create_id_sequences.sql:11: NOTICE:  relation "order_items_order_item_id_seq" already exists, skipping
+psql:migrations/phase2_create_id_sequences.sql:13: NOTICE:  relation "inventory_log_log_id_seq" already exists, skipping
+psql:tests/final_assertions.sql:7: NOTICE:  PASS: checkout, movement function and improvement exist
+psql:tests/final_assertions.sql:13: NOTICE:  PASS: customer coverage, top 100, order count and spending reconcile
+psql:tests/final_assertions.sql:20: NOTICE:  PASS: root rollup reconciles to reachable low-stock products
+psql:tests/final_assertions.sql:27: NOTICE:  PASS: both write functions have restricted execution context
+psql:tests/final_assertions.sql:31: NOTICE:  PASS: application uses approved write functions

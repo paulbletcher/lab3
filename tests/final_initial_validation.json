@@ -1,0 +1,12 @@
+{
+  "all_sql_tests_passed": true,
+  "official_four_test_harness_passed": true,
+  "failure": "Final deployed-source comparison did not normalize CRLF loaded by psql from the unchanged Windows file.",
+  "diagnostic": "Source matches exactly after CRLF-to-LF normalization; no checkout SQL change required.",
+  "flash_seconds": 11.64,
+  "retained_evidence": [
+    "final_initial_performance.json",
+    "final_initial_plans.txt",
+    "final_initial_race.log"
+  ]
+}

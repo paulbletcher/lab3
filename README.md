@@ -1,70 +1,139 @@
 # Kloud Kart - DE03 SQL Lab
 
-This branch retains the environment setup and initial data integrity investigation.
-The transactional checkout now passes all four official concurrency tests.
+A PostgreSQL solution for safe checkout, auditable inventory movements, customer spending, recursive low-stock visibility and a recurring completed-order review queue. Historical records are preserved. All five deliverables are mapped in [docs/submission_checklist.md](docs/submission_checklist.md).
 
-The performance optimization work requested as **Phase 3** is documented in
-[docs/phase3_optimization.md](docs/phase3_optimization.md). The retained function
-is [functions/phase3_place_order.sql](functions/phase3_place_order.sql); its final
-three unmonitored flash-sale runs completed in **7.47, 7.46 and 7.58 seconds**
-(median **7.47 seconds**), with 50 purchases, 350 refusals and zero errors each.
-The original Phase 2 implementation and every investigation record remain available.
+The final implementation extends the existing project. The original `schema.sql`, `load.sql`, `race_test.py`, six confidential CSVs and historical investigation documents remain intact. `functions/phase3_place_order.sql` is the retained checkout; Phase 2 and the rejected experiments are historical references. Do not execute every SQL file indiscriminately.
 
-Current checkout testing uses only `kloudkart_rebuild` at `127.0.0.1:5433`,
-database/user `postgres`, PostgreSQL 18.7. The original container on port 5432
-is excluded. Do not run the original schema or loader to deploy this function.
+## Project structure
 
-## Progress
+```text
+lab3/
+  data/                         six confidential original CSVs; Git-ignored
+  decisions/                    exactly six final architecture decision records
+  docs/                         final deliverables plus retained phase investigations
+  functions/                    retained checkout, movements and access control
+  migrations/                   sequence defaults and safe ID initialization
+  reports/                      spending, recursive low stock and order review queue
+  tests/
+    inventory_audit/             retained movement, rollback and role tests
+    phase0/, phase2/, phase3/    retained investigation and concurrency evidence
+    phase4/                     retained reporting investigation
+    final_verification.py       guarded fresh-load and end-to-end runner
+    final_*.sql                 assertions and rollback-only scenarios
+    reference_customer_spending.sql  original report for exact comparison
+    final_*.log/json/txt         final aggregate/synthetic evidence and plans
+  schema.sql, load.sql           unchanged supplied initialization files
+  race_test.py                  unchanged supplied concurrency harness
+  integrity_checks.sql          retained 21 diagnosis checks
+  setup_checks.sql              environment/object inspection
+  run_all.sql                   complete fail-fast non-destructive installer
+```
 
-| Phase | Status |
-|---|---|
-| Phase 0 - Environment setup | COMPLETE |
-| Phase 1 - Data integrity diagnosis | COMPLETE |
-| Phase 2 - Safe checkout and inventory auditing | COMPLETE - official tests passed |
-| Phase 3 - Monday customer-spending report | PENDING |
-| Phase 4 - Recursive low-stock category rollup | PENDING |
-| Phase 5 - Additional improvement and final deliverables | PENDING |
+## Prerequisites and isolated setup
 
-The progress table retains the supplied lab's report/rollup numbering; the latest
-optimization brief calls checkout performance work Phase 3. The Monday report
-and category rollup remain pending.
+Use Windows PowerShell from this project directory, Docker Desktop, Python 3 and `psycopg2-binary`:
 
-The completed investigation, quantified business impacts, observations requiring clarification and risk ranking are preserved in [docs/diagnosis.md](docs/diagnosis.md). Aggregate results and historical schema observations are preserved in [docs/phase1_results.md](docs/phase1_results.md).
+```powershell
+Set-Location 'C:\Users\User\OneDrive\Desktop\amal\lab3'
+python -m pip install psycopg2-binary
+docker ps --format '{{.Names}} {{.Ports}}'
+docker inspect kloudkart_rebuild --format '{{json .Mounts}}'
+```
 
-`integrity_checks.sql` retains all 20 required checks and the supplemental stock-movement timestamp check numbered 21. No diagnosis findings or historical records have been removed or corrected.
+Verified environment: `kloudkart_rebuild`, PostgreSQL 18.7, 500 maximum connections, loopback host port 5433. Its read-only `/lab` bind mount points to this project. The original `kloudkart` container on port 5432 is preserved. The existing rebuilt `postgres` database is also preserved: final tests use `kloudkart_submission_20261127` in the rebuilt container.
 
-## Retained resources
+Only if `kloudkart_rebuild` does not exist, create that isolated environment from this directory. Supply the password interactively; do not put credentials in a file:
 
-| File or directory | Purpose |
-|---|---|
-| [schema.sql](schema.sql) | Original supplied schema, unchanged. |
-| [load.sql](load.sql) | Original supplied loader, unchanged. |
-| [race_test.py](race_test.py) | Original supplied concurrency harness, unchanged; retained for later manual implementation work. |
-| [integrity_checks.sql](integrity_checks.sql) | Completed data integrity investigation queries, unchanged. |
-| [docs/diagnosis.md](docs/diagnosis.md) | Initial observations, quantified business impacts and problem ranking, unchanged. |
-| [docs/phase1_results.md](docs/phase1_results.md) | Historical Phase 1 schema verification, aggregate results and preservation policy. |
-| [.gitignore](.gitignore) | Keeps confidential local datasets outside Git. |
-| `data/` | Six original local CSV files, retained unchanged and ignored by Git. |
+```powershell
+$credential = Get-Credential -UserName postgres -Message 'Password for the new isolated PostgreSQL container'
+$env:POSTGRES_PASSWORD = $credential.GetNetworkCredential().Password
+docker run -d --name kloudkart_rebuild --env POSTGRES_PASSWORD --publish 127.0.0.1:5433:5432 --mount "type=bind,source=$($PWD.Path),target=/lab,readonly" postgres:18 -c max_connections=500
+Remove-Item Env:POSTGRES_PASSWORD
+docker exec kloudkart_rebuild pg_isready -U postgres
+```
 
-## Recorded environment at the restart
+Wait until `pg_isready` accepts connections. Keep the six supplied CSVs under `data/`. Container-side `\ir` and `\copy` resolve `/lab` paths through the bind mount; they cannot read arbitrary Windows paths. Host `psql` is not required. The runner privately obtains the named container's password in memory and verifies that the host connection and container have the same cluster identifier. It never writes its connection string.
 
-- Project directory: `C:\Users\User\OneDrive\Desktop\amal\lab3`.
-- Docker container: `kloudkart`; project mount: `/lab`.
-- Database and database user: `postgres`.
-- PostgreSQL version recorded during diagnosis: `18.7 (Debian 18.7-1.pgdg13+5)`.
-- No Dockerfile or Compose configuration is supplied by this repository.
+## Fresh load, installation and all checks
 
-The earlier restart changed repository files only. Subsequent checkout work uses
-the separate rebuilt environment described above. Historical Phase 1 schema
-observations describe the diagnosis baseline.
+The following command creates a uniquely named disposable database, loads the original schema/CSVs, installs the solution twice to verify safe reinstallation, runs all final SQL checks and the unchanged official harness, collects three flash-sale observations and times both reports:
 
-Do not rerun `schema.sql` or `load.sql` against either existing database. The
-original schema script includes destructive initialization statements. The
-guarded [Phase 3 runner](tests/phase3/run_experiment.py) checks the rebuilt endpoint
-and fixture safety before executing the unchanged official test harness.
+```powershell
+$testDb = 'kloudkart_submission_' + (Get-Date -Format 'yyyyMMdd_HHmmss')
+python tests/final_verification.py --fresh --database $testDb
+if ($LASTEXITCODE -ne 0) { throw 'Final verification failed; inspect tests/final_*.log' }
+```
 
-## Confidential data
+`--fresh` refuses an existing database. It never drops or resets either existing database. The original `schema.sql` contains DROP statements and is run only after creating the new, verified disposable database. All commands execute inside `kloudkart_rebuild`, working directory `/lab`, with `ON_ERROR_STOP=1`. Raw records are not copied into evidence. Sequence numbers consumed by rolled-back tests intentionally remain consumed.
 
-The six retained files are `categories.csv`, `products.csv`, `customers.csv`, `orders.csv`, `order_items.csv` and `inventory_log.csv`, all under `data/`.
+To repeat the complete verification on the already verified submission database:
 
-Keep client data local and unchanged. Do not commit CSV records, credentials or individual customer/transaction output. The diagnosis documents contain aggregate findings only.
+```powershell
+python tests/final_verification.py
+if ($LASTEXITCODE -ne 0) { throw 'Final verification failed' }
+```
+
+To install only, against the loaded disposable database:
+
+```powershell
+docker exec -w /lab kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -v ON_ERROR_STOP=1 -f run_all.sql
+```
+
+`run_all.sql` installs sequences, checkout, controlled movements, restricted permissions, three spending views, four category views and the improvement, then runs reconciliation assertions. No historical corrections or CSV reloads occur in it. Run installations with application writers stopped: sequence synchronization is a maintenance operation. Roles are reused only if their privilege attributes are safe. The solution requires administrative installation privileges; both application roles are NOLOGIN and production authentication remains a deployment task.
+
+Final test output is overwritten by a repeat; copy evidence locally first if you need to retain a particular run. The initial final-suite observation and its source-check correction are retained separately as `tests/final_initial_*`.
+
+## Original official concurrency test
+
+The guarded runner executes `race_test.py` as a separate unchanged process. To invoke it directly against the verified disposable database, privately enter the password:
+
+```powershell
+$credential = Get-Credential -UserName postgres -Message 'Password for kloudkart_rebuild'
+$env:PGPASSWORD = $credential.GetNetworkCredential().Password
+$env:DATABASE_URL = 'host=127.0.0.1 port=5433 dbname=kloudkart_submission_20261127 user=postgres'
+python race_test.py --verbose
+$raceExit = $LASTEXITCODE
+Remove-Item Env:PGPASSWORD
+Remove-Item Env:DATABASE_URL
+if ($raceExit -ne 0) { throw 'Official concurrency test failed' }
+```
+
+Use this fixture-creating harness only in a disposable database. The guarded runner also checks the fixture IDs and complete six-table fingerprints before/after cleanup. Do not point it to the original database.
+
+## Run the reports
+
+These commands display confidential reports locally. Keep customer/order rows out of Git and shared logs.
+
+```powershell
+# All customers: totals, twelve monthly amounts, ranks and top-100 indicator.
+docker exec kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -c 'SELECT * FROM public.report_customer_spending ORDER BY top_100_position;'
+# Running totals, with deterministic same-time order-ID tie breaking.
+docker exec kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -c 'SELECT * FROM public.report_customer_order_running_totals ORDER BY customer_id, order_date, order_id;'
+# Recursive low stock, inclusive threshold of ten units.
+docker exec kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -c 'SELECT * FROM public.report_low_stock_by_category ORDER BY category_id;'
+docker exec kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -c 'SELECT * FROM public.report_category_exceptions; SELECT * FROM public.report_category_cycles;'
+# Additional improvement: Finance/Ops review queue, including overlapping flags.
+docker exec kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -c 'SELECT * FROM public.report_order_review_queue ORDER BY exception_type, order_id;'
+# Execution plans without printing customer rows.
+docker exec -w /lab kloudkart_rebuild psql -X -U postgres -d kloudkart_submission_20261127 -v ON_ERROR_STOP=1 -f reports/phase6_performance_baseline.sql
+```
+
+Reports use live `CURRENT_DATE`; recorded baseline totals apply to 2026-11-27. The spending report uses recorded totals for attributable complete/completed orders through today, with the current and preceding eleven calendar months. It includes 2,520 zero-order customers on the verified date. Future dates and absent customers are excluded. The review queue intentionally covers all completed dates. Neither output establishes actual receipts. Unknown prices are never invented.
+
+The category rollup has cycle protection and no fixed depth cap; disconnected assignments and NULL stock are disclosed separately. Sum only root-category totals when reconciling distinct products. See ADR-004/005 for the definitions and limitations.
+
+## Submission documents and retained evidence
+
+- [Data findings](docs/data_findings.md) (D1); original [diagnosis](docs/diagnosis.md) and [all 21 check results](docs/phase1_results.md) remain available.
+- [Complete installer](run_all.sql) and SQL under `functions/`, `migrations/`, `reports/` (D2).
+- [Six ADRs](decisions/) (D3).
+- [One-page memo to Nana](docs/client_memo.md) (D4).
+- [Implemented improvement](docs/improvement.md) and [review view](reports/order_review_queue.sql) (D5).
+- [Measurement report](docs/performance_report.md), [submission checklist](docs/submission_checklist.md), [final evidence](tests/final_evidence.json), [raw plans](tests/final_plans.txt) and [official output](tests/final_race.log).
+- Prior checkout timing investigations: [Phase 2 performance](docs/phase2_performance.md), [experiments](docs/phase2_experiments.md), [Phase 3 optimization](docs/phase3_optimization.md), [inventory audit](docs/inventory_audit.md). Their historical pending/status statements are snapshots; this README and final deliverables describe the completed submission.
+
+## Confidentiality and limitations
+
+The six original files are categories.csv, products.csv, customers.csv, orders.csv, order_items.csv and inventory_log.csv. They remain local and ignored. Do not commit credentials, environment files or customer-level records. No commit or push is part of this work.
+
+Local simulation does not establish production readiness or a consistent ten-second flash-sale bound. The measurement report retains over-target observations. Audit enforcement depends on restricted application connections; administrators retain bypass privileges. Historical inconsistencies need business evidence. A current stock-runway forecast was rejected because the inventory history has no recent sales and contains future records; the completed-order review queue is the delivered improvement.
