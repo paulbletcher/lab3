@@ -1,0 +1,6 @@
+Execution UTC: 2026-11-27T08:05:06.403564+00:00
+Target: kloudkart; database/user postgres; project /lab
+Complete unmodified monday_spending_report.sql executed with psql -X -v ON_ERROR_STOP=1 -o /dev/null -f monday_spending_report.sql
+All report row output discarded inside the container; no client records logged.
+psql process exit status: 0
+Whole-script execution: PASS

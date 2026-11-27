@@ -1,0 +1,232 @@
+Execution UTC: 2026-11-27T07:48:56.711687+00:00
+top_100_ranking_analysis.sql SHA-256: 7612983a3505b3af2a9ff8b7b305c39ac68652193c176cb434892fe19e3f03b1
+customer_spending.sql SHA-256: bd2b533726ee3b9e65949f122713ea854359f7361d3c600d6735971343fb07b2
+Connection: {"database": "postgres", "user": "postgres", "cluster_identifier": "7712053334814294059", "server_version": "18.7 (Debian 18.7-1.pgdg13+5)", "isolation": "repeatable read", "read_only": "on", "snapshot": "1075:1075:", "cutoff": "2026-11-27 00:00:00"}
+Prior cutoff, eligibility and customer-spending CTE consistency: PASS
+customer_rows: 40420
+distinct_customer_ids: 40420
+customers_with_eligible_orders: 37900
+customers_without_eligible_orders: 2520
+missing_eligible_order_amounts: 0
+row_number_top100_customers: 100
+rank_top100_customers: 100
+dense_rank_top100_customers: 100
+row_number_top100_distinct_spending_values: 100
+population_spending_tie_groups: 1080
+top100_customers_in_population_ties: 0
+top100_customers_in_internal_ties: 0
+boundary_recorded_spending: 109814.46
+boundary_rank: 100
+boundary_dense_rank: 100
+boundary_customers: 1
+boundary_included_row_number: 1
+boundary_included_rank: 1
+boundary_included_dense_rank: 1
+tie_crosses_100th_boundary: False
+Total customer rows: expected=40420 actual=40420 PASS
+Distinct customer IDs: expected=40420 actual=40420 PASS
+Customers with eligible orders: expected=37900 actual=37900 PASS
+Customers without eligible orders: expected=2520 actual=2520 PASS
+ROW_NUMBER top-100 rows: expected=100 actual=100 PASS
+LIVE: Every existing customer appears exactly once: PASS
+LIVE: No nonexistent customer appears: PASS
+LIVE: All customer spending/order/missing totals match independent source aggregation: PASS
+LIVE: Every customer has exactly one non-NULL value for each ranking method: PASS
+LIVE: ROW_NUMBER values are unique and sequential from one: PASS
+LIVE: ROW_NUMBER top 100 returns min(100, population): PASS
+LIVE: ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+LIVE: Equal spending receives equal RANK values: PASS
+LIVE: Equal spending receives equal DENSE_RANK values: PASS
+LIVE: RANK starts at one and skips exactly the preceding tie size: PASS
+LIVE: DENSE_RANK starts at one and increments once per spending level: PASS
+LIVE: RANK matches independently counted higher-spending customers: PASS
+LIVE: DENSE_RANK matches independently counted higher spending levels: PASS
+LIVE: Spending ties are not broken by customer ID or order count: PASS
+LIVE: Rankings match the independent spending reference for every customer: PASS
+LIVE: Reusable customer totals match unchanged Step 3.3 query: PASS
+LIVE: Zero-order customers retain zero spending and missing count: PASS
+LIVE: All aggregate analysis fields match independent bucket arithmetic: PASS
+LIVE: All three candidate counts match independent bucket thresholds: PASS
+LIVE: Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+LIVE: Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+SYNTHETIC distinct_small: expected ROW_NUMBER/RANK/DENSE_RANK=[5, 5, 5]; actual=[5, 5, 5]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+SYNTHETIC distinct_large: expected ROW_NUMBER/RANK/DENSE_RANK=[100, 100, 100]; actual=[100, 100, 100]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+SYNTHETIC internal_top_tie: expected ROW_NUMBER/RANK/DENSE_RANK=[100, 100, 101]; actual=[100, 100, 101]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+SYNTHETIC crossing_boundary_tie: expected ROW_NUMBER/RANK/DENSE_RANK=[100, 102, 103]; actual=[100, 102, 103]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+SYNTHETIC all_tied_over100: expected ROW_NUMBER/RANK/DENSE_RANK=[100, 102, 102]; actual=[100, 102, 102]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+SYNTHETIC eligibility_zero_negative: expected ROW_NUMBER/RANK/DENSE_RANK=[8, 8, 8]; actual=[8, 8, 8]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+SYNTHETIC empty_population: expected ROW_NUMBER/RANK/DENSE_RANK=[0, 0, 0]; actual=[0, 0, 0]
+  Every existing customer appears exactly once: PASS
+  No nonexistent customer appears: PASS
+  All customer spending/order/missing totals match independent source aggregation: PASS
+  Every customer has exactly one non-NULL value for each ranking method: PASS
+  ROW_NUMBER values are unique and sequential from one: PASS
+  ROW_NUMBER top 100 returns min(100, population): PASS
+  ROW_NUMBER uses spending then ascending customer ID deterministically: PASS
+  Equal spending receives equal RANK values: PASS
+  Equal spending receives equal DENSE_RANK values: PASS
+  RANK starts at one and skips exactly the preceding tie size: PASS
+  DENSE_RANK starts at one and increments once per spending level: PASS
+  RANK matches independently counted higher-spending customers: PASS
+  DENSE_RANK matches independently counted higher spending levels: PASS
+  Spending ties are not broken by customer ID or order count: PASS
+  Rankings match the independent spending reference for every customer: PASS
+  Reusable customer totals match unchanged Step 3.3 query: PASS
+  Zero-order customers retain zero spending and missing count: PASS
+  All aggregate analysis fields match independent bucket arithmetic: PASS
+  All three candidate counts match independent bucket thresholds: PASS
+  Boundary amount/ranks/counts match the independent qualifying bucket: PASS
+  Boundary tie counts reconcile with all three top-100 candidate counts: PASS
+  Exact expected customer totals and all ranking values: PASS
+  Exact expected counts for all three top-100 methods: PASS
+  Exact expected 100th-position boundary findings: PASS
+Target database/user/cluster and read-only REPEATABLE READ: PASS
+Live analysis and all fixtures used the same snapshot: PASS
+Assertion totals: live=21; baselines=5; synthetic=168 across 7 fixtures
+Overall top-100 ranking comparison validation: PASS
+Read-only transaction completed; VALUES fixtures created no records or database objects.
+Comparison only; final ranking policy and combined report remain unselected.

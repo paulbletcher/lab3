@@ -1,0 +1,1 @@
+FAIL: Each result set must be one reusable SELECT statement
