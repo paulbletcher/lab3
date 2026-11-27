@@ -1,9 +1,8 @@
--- Phase 3: checkout with customer validation folded into the stock UPDATE.
--- Supersedes functions/phase2_place_order.sql; original remains for rollback.
--- Validation/refusal rules, conditional stock deduction, three inserts and
--- caller transaction boundary are preserved. No indexes/settings are required.
--- Apply only to kloudkart_rebuild on host 127.0.0.1:5433 using the guarded runner.
--- Measurement evidence and rejected experiments: docs/phase3_optimization.md.
+-- Final checkout: validate the latest balance under a product row lock.
+-- Tested with the unchanged harness: 9.29, 7.98 and 7.54 seconds for 400 attempts.
+-- The verified client uses Linux TCP with SCRAM password authentication.
+-- Lock, stock deduction, order, item and audit remain one caller transaction.
+-- Earlier conditional-update implementation is preserved in Git and test backups.
 
 CREATE OR REPLACE FUNCTION public.place_order(
     p_customer_id bigint,
@@ -16,14 +15,14 @@ RETURNS TABLE (
     message text
 )
 LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, pg_temp
 AS $$
 
 DECLARE
     v_unit_price numeric(12,2);
     v_stock_quantity integer;
     v_new_order_id bigint;
-    v_customer_exists boolean;
-    v_product_exists boolean;
 
 BEGIN
 
@@ -39,55 +38,45 @@ BEGIN
     END IF;
 
 
-    -- 3. Atomically check and deduct available stock.
-    -- PostgreSQL handles competing updates through row-level locking.
+    -- 2. Confirm that the customer exists.
+    IF NOT EXISTS (
+        SELECT 1
+        FROM public.customers AS c
+        WHERE c.customer_id = p_customer_id
+    ) THEN
+
+        RETURN QUERY
+        SELECT FALSE, NULL::bigint, 'Customer not found.'::text;
+        RETURN;
+    END IF;
+
+
+    -- 3. Queue on the product row before validating its current balance.
+    -- READ COMMITTED returns the latest row after an earlier owner commits.
+    SELECT p.price, p.stock_quantity
+    INTO v_unit_price, v_stock_quantity
+    FROM public.products AS p
+    WHERE p.product_id = p_product_id
+    FOR NO KEY UPDATE;
+
+    IF NOT FOUND THEN
+        RETURN QUERY SELECT FALSE,NULL::bigint,'Product not found.'::text;
+        RETURN;
+    ELSIF v_unit_price IS NULL OR v_unit_price < 0 THEN
+        RETURN QUERY SELECT FALSE,NULL::bigint,'Invalid product price.'::text;
+        RETURN;
+    ELSIF v_stock_quantity IS NULL OR v_stock_quantity < p_quantity THEN
+        RETURN QUERY SELECT FALSE,NULL::bigint,'Out of stock.'::text;
+        RETURN;
+    END IF;
+
+    -- 4. Deduct only after locking and validating the current product row.
+    -- Retain the stock predicate as defense in depth. The row lock lasts to commit.
     UPDATE public.products AS p
     SET stock_quantity = p.stock_quantity - p_quantity
-    WHERE p.product_id = p_product_id
-      AND p.stock_quantity >= p_quantity
-      AND p.price IS NOT NULL
-      AND p.price >= 0
-      AND EXISTS (
-          SELECT 1 FROM public.customers AS c
-          WHERE c.customer_id = p_customer_id
-      )
-    RETURNING p.price
-    INTO v_unit_price;
-
-
-    -- 4. Handle failed stock deduction.
+    WHERE p.product_id = p_product_id AND p.stock_quantity >= p_quantity;
     IF NOT FOUND THEN
-
-        -- One fallback statement preserves customer-before-product messages.
-        SELECT EXISTS (
-                   SELECT 1 FROM public.customers AS c
-                   WHERE c.customer_id = p_customer_id
-               ), p.product_id IS NOT NULL, p.stock_quantity, p.price
-        INTO v_customer_exists, v_product_exists, v_stock_quantity, v_unit_price
-        FROM (VALUES (1)) AS seed(n)
-        LEFT JOIN public.products AS p ON p.product_id = p_product_id;
-
-        IF NOT v_customer_exists THEN
-            RETURN QUERY
-            SELECT FALSE, NULL::bigint, 'Customer not found.'::text;
-        ELSIF NOT v_product_exists THEN
-
-            RETURN QUERY
-            SELECT FALSE, NULL::bigint, 'Product not found.'::text;
-
-        ELSIF v_unit_price IS NULL OR v_unit_price < 0 THEN
-
-            RETURN QUERY
-            SELECT FALSE, NULL::bigint, 'Invalid product price.'::text;
-
-        ELSE
-
-            RETURN QUERY
-            SELECT FALSE, NULL::bigint, 'Out of stock.'::text;
-
-        END IF;
-
-        RETURN;
+        RAISE EXCEPTION 'Locked product stock unexpectedly changed';
     END IF;
 
 

@@ -1,0 +1,32 @@
+{
+  "original_reference": {
+    "runs_ms": [
+      2359.914,
+      2373.094,
+      2353.173
+    ],
+    "median_ms": 2359.914,
+    "worst_ms": 2373.094,
+    "p95": "insufficiently sampled (n=3)"
+  },
+  "integrated_customer": {
+    "runs_ms": [
+      1341.235,
+      1836.64,
+      1497.109
+    ],
+    "median_ms": 1497.109,
+    "worst_ms": 1836.64,
+    "p95": "insufficiently sampled (n=3)"
+  },
+  "recursive_low_stock": {
+    "runs_ms": [
+      15.167,
+      13.06,
+      13.561
+    ],
+    "median_ms": 13.561,
+    "worst_ms": 15.167,
+    "p95": "insufficiently sampled (n=3)"
+  }
+}

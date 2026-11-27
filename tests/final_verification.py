@@ -20,6 +20,7 @@ import time
 from datetime import datetime, timezone
 import psycopg2
 from psycopg2 import extensions, sql
+from race_client import prepare_linux_client,run_race,verify_linux_authentication
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'tests'
@@ -90,6 +91,8 @@ def checkout_edges(conn):
                 ('zero quantity', customer, pid, 0, 'invalid'),
                 ('negative quantity', customer, pid, -1, 'invalid'),
                 ('missing customer', missing, pid, 1, 'customer not found'),
+                ('bigint customer', 2**40, pid, 1, 'customer not found'),
+                ('bigint customer and product precedence', 2**40, 2**40, 1, 'customer not found'),
                 ('missing product', customer, pid-1, 1, 'product not found'),
                 ('bigint product', customer, 2**40, 1, 'product not found'),
                 ('customer precedence', missing, pid-1, 1, 'customer not found'),
@@ -116,6 +119,22 @@ def checkout_edges(conn):
             cur.execute('SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM inventory_log)')
             assert counts == cur.fetchone()
             checks.append('failed order INSERT restores stock and all write counts')
+            # Fail the LAST write, after stock/order/item work has executed.
+            cur.execute('UPDATE products SET price=100 WHERE product_id=%s',(pid,))
+            cur.execute(sql.SQL('ALTER TABLE public.inventory_log ADD CONSTRAINT flash_checkout_audit_failure CHECK (product_id <> {}) NOT VALID').format(sql.Literal(pid)))
+            cur.execute('SAVEPOINT fail_checkout_audit')
+            try:
+                call(customer,pid,1)
+            except psycopg2.errors.CheckViolation:
+                cur.execute('ROLLBACK TO SAVEPOINT fail_checkout_audit')
+            else:
+                raise AssertionError('Expected checkout audit insertion failure')
+            cur.execute('SELECT stock_quantity FROM products WHERE product_id=%s',(pid,))
+            assert cur.fetchone()[0]==2
+            cur.execute('SELECT (SELECT COUNT(*) FROM orders),(SELECT COUNT(*) FROM order_items),(SELECT COUNT(*) FROM inventory_log)')
+            assert counts==cur.fetchone()
+            cur.execute('ALTER TABLE public.inventory_log DROP CONSTRAINT flash_checkout_audit_failure')
+            checks.append('failed final checkout audit INSERT restores stock, order and item')
             cur.execute('UPDATE products SET price=0 WHERE product_id=%s', (pid,))
             assert call(customer, pid, 1)[0] is True
             checks.append('zero-priced checkout succeeds atomically; caller rollback follows')
@@ -153,9 +172,15 @@ def main():
     ap.add_argument('--fresh', action='store_true')
     ap.add_argument('--database', default='kloudkart_submission_20261127')
     ap.add_argument('--race-repeats', type=int, default=3, help='Total Test 2 observations, including full suite')
+    ap.add_argument('--race-client',choices=['linux','windows'],default='linux',
+                    help='Unmodified harness client; Linux Docker client avoids Windows startup/proxy overhead')
+    ap.add_argument('--allow-slow-race',action='store_true',help='Diagnostic only: save evidence without enforcing the ten-second target')
     args = ap.parse_args()
     if args.race_repeats < 1:
         raise RuntimeError('At least one race measurement is required')
+    client_metadata=prepare_linux_client(OUT/'final_client_build.log') if args.race_client=='linux' else dict(
+        client='native-windows',versions=dict(python=sys.version.split()[0],psycopg2=psycopg2.__version__.split()[0]),
+        network='Windows loopback 127.0.0.1:5433 published Docker port',connections=400,harness_modified=False,connection_pool=False)
     if not re.fullmatch(r'kloudkart_submission_[a-z0-9_]+', args.database):
         raise RuntimeError('Only explicitly named disposable submission databases are allowed')
     detail = json.loads(run(['docker', 'inspect', CONTAINER]).stdout)[0]
@@ -236,12 +261,14 @@ def main():
     # Close diagnostic connections while timing the exact supplied harness.
     conn.close()
     admin.close()
-    child_env = os.environ.copy()
-    child_env['DATABASE_URL'] = extensions.make_dsn(dbname=args.database, **base)
-    child_env['PYTHONIOENCODING'] = 'utf-8'
+    dsn=extensions.make_dsn(dbname=args.database, **base)
+    if args.race_client=='linux':
+        auth=verify_linux_authentication(dsn)
+        assert auth['database']==args.database and auth['cluster']==cluster
+        client_metadata['authentication_preflight']=auth
+        client_metadata['authentication']='scram-sha-256 on bridge address; invalid password rejected'
     start = time.perf_counter()
-    race = subprocess.run([sys.executable, str(ROOT/'race_test.py'), '--verbose'], cwd=ROOT,
-                          env=child_env, capture_output=True, text=True, encoding='utf-8', errors='replace')
+    race = run_race(dsn,['--verbose'],client=args.race_client)
     (OUT/'final_race.log').write_text(race.stdout+race.stderr,encoding='utf-8')
     if race.returncode or 'PASSED' not in race.stdout:
         raise RuntimeError('Official harness failed; inspect tests/final_race.log')
@@ -260,8 +287,7 @@ def main():
     race_result['flash_runs_seconds'] = [race_result['flash_seconds']]
     print('PASS official four-test harness: '+json.dumps(race_result),flush=True)
     for number in range(2,args.race_repeats+1):
-        extra = subprocess.run([sys.executable,str(ROOT/'race_test.py'),'--test','2','--verbose'],
-                               cwd=ROOT,env=child_env,capture_output=True,text=True,encoding='utf-8',errors='replace')
+        extra = run_race(dsn,['--test','2','--verbose'],client=args.race_client)
         (OUT/f'final_race_repeat_{number}.log').write_text(extra.stdout+extra.stderr,encoding='utf-8')
         match = re.search(r'(\d+) sold, (\d+) refused, (\d+) errored, wall clock ([\d.]+)s',extra.stdout)
         assert extra.returncode == 0 and 'PASSED' in extra.stdout and match, 'Repeated official test 2 failed'
@@ -294,7 +320,7 @@ def main():
     info = json.loads(run(['docker','info','--format','{{json .}}']).stdout)
     spec = {k:info.get(k) for k in ('NCPU','MemTotal','OSType','Architecture','KernelVersion','ServerVersion')}
     evidence = dict(verified_at_utc=datetime.now(timezone.utc).isoformat(),database=args.database,
-        container=CONTAINER,environment=environment,docker_resources=spec,
+        container=CONTAINER,environment=environment,docker_resources=spec,race_client=client_metadata,
         container_limits={k:detail['HostConfig'].get(k) for k in ('Memory','NanoCpus','CpuQuota','CpuPeriod')},
         six_table_fingerprints=before,protected_file_sha256=hashes_before,
         existing_rebuilt_data_unchanged=True,source_files_unchanged=True,git_head_unchanged=True,
@@ -307,6 +333,8 @@ def main():
         performance_targets=dict(flash_all_runs_within_ten_seconds=race_result['flash_target_all_runs_met']))
     write('final_evidence.json',evidence)
     print('PASS final fingerprints, source preservation, deployment and evidence',flush=True)
+    if not race_result['flash_target_all_runs_met'] and not args.allow_slow_race:
+        raise RuntimeError('Correctness passed, but flash-sale latency exceeded ten seconds; see final_evidence.json')
 
 
 if __name__ == '__main__':

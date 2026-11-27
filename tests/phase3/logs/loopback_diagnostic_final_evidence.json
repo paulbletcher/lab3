@@ -1,0 +1,230 @@
+{
+  "verified_at_utc": "2026-11-27T15:43:57.982730+00:00",
+  "database": "kloudkart_submission_20261127",
+  "container": "kloudkart_rebuild",
+  "environment": [
+    "2026-11-27",
+    "PostgreSQL 18.7 (Debian 18.7-1.pgdg13+5) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+    "500",
+    "4MB",
+    "128MB",
+    "Etc/UTC"
+  ],
+  "docker_resources": {
+    "NCPU": 4,
+    "MemTotal": 4039696384,
+    "OSType": "linux",
+    "Architecture": "x86_64",
+    "KernelVersion": "6.18.58.1-microsoft-standard-WSL2",
+    "ServerVersion": "29.9.2"
+  },
+  "race_client": {
+    "client": "linux-docker",
+    "image": "kloudkart-race-client:de03",
+    "image_id": "sha256:4a659d203d519400540a8296e3e253b58aaaf2a9dff975373c4fdcfa1a399e08",
+    "versions": {
+      "python": "3.14.10",
+      "psycopg2": "2.9.13"
+    },
+    "network": "same network namespace as kloudkart_rebuild; TCP 127.0.0.1:5432",
+    "connections": 400,
+    "harness_modified": false,
+    "connection_pool": false
+  },
+  "container_limits": {
+    "Memory": 0,
+    "NanoCpus": 0,
+    "CpuQuota": 0,
+    "CpuPeriod": 0
+  },
+  "six_table_fingerprints": {
+    "categories": [
+      94,
+      "6c816196cdec2bde36633b0125358c9d"
+    ],
+    "products": [
+      4023,
+      "44b1f90f80addeb3a587134191649e87"
+    ],
+    "customers": [
+      40420,
+      "03938d3f98302dbba1154204f16d4993"
+    ],
+    "orders": [
+      159384,
+      "7a0c0a0a27f2762a44e7dabefecce1e3"
+    ],
+    "order_items": [
+      336559,
+      "50c5421d9e8748211f236376b698affd"
+    ],
+    "inventory_log": [
+      282352,
+      "5e7f047014f68e5d5e5eb7c890980aae"
+    ]
+  },
+  "protected_file_sha256": {
+    "schema.sql": "f23c11f464121cf1baa2f36732b03e9b15832f19f69f85a4cb6623a509ac16d9",
+    "load.sql": "c0432f353e71611169ea0cac62a523f7cd2727867cd567c6de3081c8ce5f2e6a",
+    "race_test.py": "5f12a6697400dee3876dfa33a03fbdcc1dc906f665f3c0a6aaeffe73cdb27d00",
+    "data\\categories.csv": "65f77f0247cf0d1f6590ee57a6a5cf42ba222943b5c33b91ef5ff4b54f6050f9",
+    "data\\customers.csv": "e6b5a096aa88ff86363b34abbcbbbff1b01187444c9a65fc346c1966260d9ea2",
+    "data\\inventory_log.csv": "7bc90c67f78d5d9b169ae9735dd45acab7a7633ef9a657fb3a9cd9577bebeb4a",
+    "data\\order_items.csv": "ee33cd49579ecb1547682a3747881f0ebe5990fa51e7d815f118fa7d9dc6cce3",
+    "data\\orders.csv": "28e54736e1bb17f291041b9cd1f2be59f615dd4eac6365e2100af650f30001ae",
+    "data\\products.csv": "5d8d12635139f785c982d8ffcf777364f5cac68279088a88e729348149e7445f"
+  },
+  "existing_rebuilt_data_unchanged": true,
+  "source_files_unchanged": true,
+  "git_head_unchanged": true,
+  "original_container_untouched": true,
+  "reinstallation_preserves_sequence_progress": true,
+  "sql_test_logs": [
+    "final_checkout.log",
+    "final_movements.log",
+    "final_audit_rollback.log",
+    "final_permissions.log",
+    "final_reporting.log",
+    "final_recursive.log",
+    "final_improvement.log"
+  ],
+  "checkout_edge_checks": [
+    "null customer",
+    "null product",
+    "null quantity",
+    "zero quantity",
+    "negative quantity",
+    "missing customer",
+    "missing product",
+    "bigint product",
+    "customer precedence",
+    "oversell",
+    "null price",
+    "negative price",
+    "null stock",
+    "negative stock",
+    "failed order INSERT restores stock and all write counts",
+    "zero-priced checkout succeeds atomically; caller rollback follows"
+  ],
+  "review_queue_groups": [
+    [
+      "incomplete_line_amount",
+      95,
+      "455904.42",
+      null
+    ],
+    [
+      "missing_customer",
+      144,
+      "388780.89",
+      "1640.37"
+    ],
+    [
+      "total_mismatch",
+      1624,
+      "5848525.33",
+      "-1266190.96"
+    ]
+  ],
+  "review_queue_unique_and_flags": [
+    1861,
+    1863
+  ],
+  "inventory_profile": [
+    0,
+    33,
+    0,
+    "2026-10-07 18:49:00"
+  ],
+  "race": {
+    "successes": 50,
+    "refusals": 350,
+    "errors": 0,
+    "flash_seconds": 9.89,
+    "process_seconds": 13.618214100017212,
+    "all_four_passed": true,
+    "audit_test": {
+      "successes": 5,
+      "refusals": 7,
+      "movements": 5
+    },
+    "last_unit_test": {
+      "rounds": 25,
+      "successes": 25,
+      "refusals": 25
+    },
+    "flash_runs_seconds": [
+      9.89,
+      5.67,
+      6.39,
+      11.23,
+      8.07
+    ],
+    "flash_median_seconds": 8.07,
+    "flash_worst_seconds": 11.23,
+    "flash_target_all_runs_met": false
+  },
+  "performance": {
+    "original_reference": {
+      "runs_ms": [
+        3128.24,
+        4104.823,
+        2625.013
+      ],
+      "median_ms": 3128.24,
+      "worst_ms": 4104.823,
+      "p95": "insufficiently sampled (n=3)"
+    },
+    "integrated_customer": {
+      "runs_ms": [
+        1304.249,
+        1952.819,
+        2683.131
+      ],
+      "median_ms": 1952.819,
+      "worst_ms": 2683.131,
+      "p95": "insufficiently sampled (n=3)"
+    },
+    "recursive_low_stock": {
+      "runs_ms": [
+        17.815,
+        15.826,
+        17.95
+      ],
+      "median_ms": 17.815,
+      "worst_ms": 17.95,
+      "p95": "insufficiently sampled (n=3)"
+    }
+  },
+  "indexes": [
+    [
+      "categories",
+      "categories_pkey"
+    ],
+    [
+      "customers",
+      "customers_pkey"
+    ],
+    [
+      "inventory_log",
+      "inventory_log_pkey"
+    ],
+    [
+      "order_items",
+      "order_items_pkey"
+    ],
+    [
+      "orders",
+      "orders_pkey"
+    ],
+    [
+      "products",
+      "products_pkey"
+    ]
+  ],
+  "all_checks_passed": true,
+  "all_checks_scope": "correctness, installation and preservation; latency is reported separately",
+  "performance_targets": {
+    "flash_all_runs_within_ten_seconds": false
+  }
+}

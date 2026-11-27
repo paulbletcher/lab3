@@ -1,0 +1,21 @@
+{
+  "source": "tests/phase3/experiments/06_locked_stock_lookup.sql",
+  "edge_checks": [
+    "null customer",
+    "null product",
+    "null quantity",
+    "zero quantity",
+    "negative quantity",
+    "missing customer",
+    "missing product",
+    "bigint product",
+    "customer precedence",
+    "oversell",
+    "null price",
+    "negative price",
+    "null stock",
+    "negative stock",
+    "failed order INSERT restores stock and all write counts",
+    "zero-priced checkout succeeds atomically; caller rollback follows"
+  ]
+}

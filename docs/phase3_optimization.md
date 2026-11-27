@@ -425,3 +425,26 @@ index, including results of every official suite and final test outcomes.
 **Phase 3 performance acceptance is complete for the measured local workload.**
 No further optimization was undertaken after the confirmation suite and final
 integrity/deployment checks passed.
+
+
+## Submission follow-up: selected lock-first checkout
+
+The previous retained implementation remained correct but had inconsistent final timing. Follow-up connection-only controls took 18.30 and 18.52 seconds from native Windows, so SQL alone could not remove the full client-path cost. The same 400-connection SELECT 1 control in a Linux client using matching SCRAM authentication took 4.49 and 4.30 seconds. Hardware remained the same two-core/four-thread i5-6300U laptop, approximately 8 GiB host RAM and the shared 4-vCPU/3.76-GiB Docker engine. Free Windows RAM was about 0.4-0.5 GiB during inspection; this is an observation, not an isolated cause.
+
+Initial Linux loopback measurements used the existing trusted-localhost rule. They are retained as diagnostics, not acceptance evidence; one five-run diagnostic also exceeded ten seconds. Final timing instead targets the container bridge address, with an invalid-password rejection preflight proving password authentication is active. No authentication, durability, planner or server settings were changed.
+
+| Candidate, authenticated Linux client | Seconds | Decision |
+|---|---|---|
+| Previous conditional UPDATE/customer guard | 14.92, 8.54, 9.36 | Correct; not consistently within target |
+| Lock-first stock lookup | 9.29, 7.98, 7.54 | **Selected**, median 7.98, worst 9.29 |
+| Combined preplanned write CTE | 14.63, 18.47, 13.44 | Rejected; all over target |
+
+The selected version locks the product with FOR NO KEY UPDATE, inspects the latest balance, then executes a guarded deduction and the existing three inserts. Refusals no longer execute an UPDATE followed by a fallback lookup. Row locks persist to transaction end and can themselves cause writes; administrators remain able to bypass approved paths. The dependent-write candidate passed all 19 edge/rollback cases but was slower. The early-refusal proposal was not applied. No candidate's unfavorable result was removed.
+
+`functions/phase3_place_order.sql` now contains the selected lock-first implementation. The existing final verifier supports an authenticated Linux client by default and enforces the ten-second target for every recorded Test 2 run. Its --race-client windows --allow-slow-race options retain an explicitly diagnostic native Windows route. The unchanged harness, 400 buyers, 50 units, default protocol negotiation, audit requirements and durable commits are preserved. The Linux image is a temporary development/test client, not additional production infrastructure.
+
+The selected version was integrated and checked with the full original four-test harness, application permissions and 19 checkout edge/rollback checks, including a forced failure of the final audit insert. Final confirmation, data/source preservation and timings are recorded in `tests/phase3/logs/flash_final_selected.json`; raw output is `tests/phase3/logs/flash_final_full.log`. Original data, supplied schema, loader and harness remain unchanged. No commit or push was performed by this follow-up.
+
+Technical basis: [PostgreSQL row locking](https://www.postgresql.org/docs/18/explicit-locking.html) and [READ COMMITTED behavior](https://www.postgresql.org/docs/18/transaction-iso.html). Local observed timing is not a universal capacity guarantee.
+
+Final full-suite confirmation: **19.62 seconds**, with all four official correctness tests passing. Across the selected version's four observations (9.29, 7.98, 7.54, 19.62), median is **8.635 seconds** and worst **19.62 seconds**. The three faster trials do not establish consistent compliance. At the user's request, comparison work stopped and this selected implementation was retained with the limitation disclosed.

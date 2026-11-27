@@ -1,0 +1,41 @@
+BEGIN
+INSERT 0 1
+ set_config 
+------------
+ 100999
+(1 row)
+
+ set_config 
+------------
+ 100001
+(1 row)
+
+SET
+  active_role  
+---------------
+ kloudkart_app
+(1 row)
+
+DO
+RESET
+DO
+ROLLBACK
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 1: Direct stock update denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 2: Direct audit insertion denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 3: Direct audit modification denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 4: Direct audit deletion denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 5: Direct product deletion denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 6: Direct product insertion denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 7: Direct sequence access denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 8: Direct order insertion denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 9: Direct product reading denied.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 10: Approved restock succeeded. Stock = 30.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:181: NOTICE:  PASS Test 11: Approved checkout succeeded.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  PASS Test 12: Stock, orders and audit trail reconcile.
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  Initial stock: 20
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  Restock: +10
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  Checkout: -7
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  Final stock: 23
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  Audit records: 2
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  Orders created: 1
+psql:tests/inventory_audit/07_test_inventory_permissions.sql:257: NOTICE:  ALL 12 APPLICATION PERMISSION TESTS PASSED.

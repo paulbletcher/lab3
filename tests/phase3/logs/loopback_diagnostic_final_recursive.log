@@ -1,0 +1,97 @@
+CREATE FUNCTION
+BEGIN
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+INSERT 0 35
+INSERT 0 4
+INSERT 0 6
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+CREATE FUNCTION
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ check 
+-------
+ 
+(1 row)
+
+ROLLBACK
+psql:tests/final_recursive.sql:6: NOTICE:  PASS: actual hierarchy: 91 categories, depth four
+psql:tests/final_recursive.sql:8: NOTICE:  PASS: actual category cycle members
+psql:tests/final_recursive.sql:10: NOTICE:  PASS: actual root total: 1931
+psql:tests/final_recursive.sql:14: NOTICE:  PASS: actual orphan, unreachable and uncategorized exceptions
+psql:tests/final_recursive.sql:32: NOTICE:  PASS: 35-level hierarchy is fully traversed
+psql:tests/final_recursive.sql:35: NOTICE:  PASS: deep root: threshold inclusive, negative included, NULL disclosed
+psql:tests/final_recursive.sql:37: NOTICE:  PASS: leaf direct count excludes stock above threshold
+psql:tests/final_recursive.sql:39: NOTICE:  PASS: synthetic two-member and self cycles terminate
+psql:tests/final_recursive.sql:42: NOTICE:  PASS: no duplicate hierarchy paths
+psql:tests/final_recursive.sql:47: NOTICE:  PASS: synthetic product exceptions are explicit
+psql:tests/final_assertions.sql:7: NOTICE:  PASS: checkout, movement function and improvement exist
+psql:tests/final_assertions.sql:13: NOTICE:  PASS: customer coverage, top 100, order count and spending reconcile
+psql:tests/final_assertions.sql:20: NOTICE:  PASS: root rollup reconciles to reachable low-stock products
+psql:tests/final_assertions.sql:27: NOTICE:  PASS: both write functions have restricted execution context
+psql:tests/final_assertions.sql:31: NOTICE:  PASS: application uses approved write functions

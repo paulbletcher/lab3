@@ -1,0 +1,24 @@
+{
+  "source": "tests/phase3/experiments/07_preplanned_checkout_writes.sql",
+  "edge_checks": [
+    "null customer",
+    "null product",
+    "null quantity",
+    "zero quantity",
+    "negative quantity",
+    "missing customer",
+    "bigint customer",
+    "bigint customer and product precedence",
+    "missing product",
+    "bigint product",
+    "customer precedence",
+    "oversell",
+    "null price",
+    "negative price",
+    "null stock",
+    "negative stock",
+    "failed order INSERT restores stock and all write counts",
+    "failed final checkout audit INSERT restores stock, order and item",
+    "zero-priced checkout succeeds atomically; caller rollback follows"
+  ]
+}

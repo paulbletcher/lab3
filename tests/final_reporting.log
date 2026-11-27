@@ -50,11 +50,11 @@ INSERT 0 7
 
 ROLLBACK
 psql:tests/final_reporting.sql:8: NOTICE:  PASS: optimized output equals original: both EXCEPT ALL directions
-psql:tests/final_reporting.sql:11: NOTICE:  PASS: actual-data customer baseline as of 2026-11-27
-psql:tests/final_reporting.sql:15: NOTICE:  PASS: every customer has twelve calendar-month entries
-psql:tests/final_reporting.sql:27: NOTICE:  PASS: all twelve monthly amounts reconcile to eligible orders
-psql:tests/final_reporting.sql:34: NOTICE:  PASS: last running total reconciles for every customer
-psql:tests/final_reporting.sql:49: NOTICE:  PASS: synthetic: normalization, future cutoff, lifetime and monthly window
-psql:tests/final_reporting.sql:52: NOTICE:  PASS: synthetic: customer without qualifying orders remains
-psql:tests/final_reporting.sql:56: NOTICE:  PASS: synthetic: running total uses date then order ID
-psql:tests/final_reporting.sql:61: NOTICE:  PASS: synthetic: shared rank and deterministic customer-ID tie break
+psql:tests/final_reporting.sql:13: NOTICE:  PASS: actual-data customer baseline as of 2026-11-27
+psql:tests/final_reporting.sql:20: NOTICE:  PASS: every customer has twelve calendar-month entries
+psql:tests/final_reporting.sql:32: NOTICE:  PASS: all twelve monthly amounts reconcile to eligible orders
+psql:tests/final_reporting.sql:39: NOTICE:  PASS: last running total reconciles for every customer
+psql:tests/final_reporting.sql:54: NOTICE:  PASS: synthetic: normalization, future cutoff, lifetime and monthly window
+psql:tests/final_reporting.sql:57: NOTICE:  PASS: synthetic: customer without qualifying orders remains
+psql:tests/final_reporting.sql:61: NOTICE:  PASS: synthetic: running total uses date then order ID
+psql:tests/final_reporting.sql:66: NOTICE:  PASS: synthetic: shared rank and deterministic customer-ID tie break

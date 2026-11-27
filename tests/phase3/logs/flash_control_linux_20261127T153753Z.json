@@ -1,0 +1,22 @@
+[
+  {
+    "total_seconds": 22.629699195000285,
+    "before_barrier_seconds": 20.80821788799949,
+    "after_barrier_seconds": 1.821481307000795,
+    "successes": 400,
+    "errors": 0,
+    "connection_median_ms": 10899.91116300007,
+    "query_max_ms": 1720.2708659970085,
+    "client": "linux"
+  },
+  {
+    "total_seconds": 3.4552311730003566,
+    "before_barrier_seconds": 2.4161549380005454,
+    "after_barrier_seconds": 1.0390762349998113,
+    "successes": 400,
+    "errors": 0,
+    "connection_median_ms": 133.3999535017938,
+    "query_max_ms": 865.6498479977017,
+    "client": "linux"
+  }
+]
