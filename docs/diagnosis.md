@@ -117,7 +117,7 @@ The findings below are ranked by their impact on stock accuracy, order fulfilmen
 - **Business impact:** Negative stock balances make it difficult for Kloud Kart to determine how much inventory is actually available. Incorrect stock records can lead to overselling, refunds, customer complaints or the refusal of legitimate purchases. The number of affected sales and their financial cost cannot be established from the negative balances alone.
 - **Recommendation:** Implement concurrency-safe order placement, prevent new negative stock balances and reconcile existing negative balances against physical inventory. Automatically setting negative quantities to zero would hide discrepancies without establishing the actual stock available.
 
-### 2. Inconsistent Order Totals — High
+### 2. Inconsistent Order Totals — Critical
 
 - **Evidence (Checks 11 and 19):** 2,279 orders have stored totals that differ from their calculated line-item totals. Of these, 1,624 are completed orders with complete line amounts. Across those completed orders, stored totals are lower by 1,266,190.96 overall, with absolute differences totalling 2,074,053.86.
 - **Cause:** Order totals are stored separately from line-item amounts, without an enforced mechanism ensuring consistency.
